@@ -1,0 +1,64 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # PRの品質チェック
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      - name: Check for console.log statements
+        run: |
+          if grep -r "console\.log" app/ components/ hooks/ constants/ --include="*.ts" --include="*.tsx"; then
+            echo "Warning: console.log statements found in production code"
+            exit 1
+          fi
+
+  # セキュリティチェック
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for sensitive data
+        run: |
+          if grep -r "password\|secret\|key\|token" app/ components/ hooks/ constants/ --include="*.ts" --include="*.tsx" | grep -v "//\|/\*"; then
+            echo "Warning: Potential sensitive data found in code"
+            exit 1
+          fi

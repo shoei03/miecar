@@ -1,0 +1,102 @@
+name: Scheduled Maintenance
+
+on:
+  schedule:
+    # 毎週月曜日の午前9時（UTC）に実行
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  # 依存関係の更新チェック
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for outdated packages
+        run: npm outdated
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check Expo dependencies
+        run: npx expo install --check
+
+  # セキュリティスキャン
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: Check for known vulnerabilities
+        run: |
+          if npm audit --audit-level=moderate 2>&1 | grep -q "found"; then
+            echo "Security vulnerabilities found"
+            exit 1
+          else
+            echo "No security vulnerabilities found"
+          fi
+
+  # コード品質レポート
+  code-quality-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint with report
+        run: npm run lint -- --format=json --output-file=eslint-report.json || true
+
+      - name: Generate code quality report
+        run: |
+          echo "## Code Quality Report" >> report.md
+          echo "Generated on: $(date)" >> report.md
+          echo "" >> report.md
+          echo "### ESLint Issues" >> report.md
+          if [ -f eslint-report.json ]; then
+            echo "ESLint report generated" >> report.md
+          else
+            echo "No ESLint issues found" >> report.md
+          fi
+          echo "" >> report.md
+          echo "### Dependencies" >> report.md
+          echo "Total dependencies: $(npm list --depth=0 | wc -l)" >> report.md
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-report
+          path: report.md
+          retention-days: 30
