@@ -15,64 +15,347 @@ alwaysApply: false
 
 プロジェクトは、クリーンアーキテクチャの原則に基づき、機能と責務ごとに明確に分離された階層的な構造を採用しています。
 
-```
-family-car-scheduler/
-├── .github/                 # GitHub Actions, Issue/PRテンプレートなど
-├── .husky/                  # Git hooks (pre-commit, pre-push)
-├── .vscode/                 # VS Codeの設定ファイル
-├── docs/                    # プロジェクト関連ドキュメント
-├── legal/                   # プライバシーポリシー、利用規約などの法的文書
-├── scripts/                 # ビルド・デプロイ用のスクリプト
-├── src/                     # アプリケーションのソースコード
-├── .env.* # 環境変数ファイル
-└── ... その他の設定ファイル
-```
-
-#### src/ フォルダ詳細
-
-アプリケーションの主要なソースコードは `src/` フォルダに格納されています。
-
-```
-src/
-├── app/                     # Expo Routerによるページ構成
-├── assets/                  # 画像、フォント、アニメーションなどの静的リソース
-├── components/              # 再利用可能なUIコンポーネント
-├── constants/               # 定数定義（テーマ、設定、静的データなど）
-├── hooks/                   # カスタムフック
-├── services/                # API通信やデータアクセス層
-├── store/                   # 状態管理（Zustandを使用）
-├── types/                   # TypeScriptの型定義
-└── utils/                   # 汎用的なユーティリティ関数
-```
-
------
-
-### 2\. 詳細フォルダ構成と責務
-
-#### **src/app/ - ページ構成 (Expo Router)**
-
-  - `(auth)/`: 認証フロー（ログイン、新規登録、パスワードリセットなど）に関連するページをグループ化します。
-  - `(tabs)/`: アプリのメイン機能（カレンダー、予約一覧、プロフィール）を格納するタブナビゲーションです。
-  - `modal/`: ページとしてモーダル表示されるコンポーネントを配置します。
-  - `_layout.tsx`: アプリのルートレイアウト。認証状態に応じたナビゲーションの切り替えを管理します。
-
-#### **src/components/ - コンポーネント構成**
-
-  - `ui/`: アプリケーション全体で再利用される、スタイリングされた基本的なUI要素（ボタン、入力欄、モーダルなど）を配置します。
-  - `calendar/`, `reservation/`, `help/`: 特定の機能に特化したコンポーネントを配置します。
-
-#### **src/hooks/ - カスタムフック**
-
-  - `auth/`, `firebase/`, `reservation/`: 特定の機能に関連するロジック（データの取得、状態管理、API通信など）をカプセル化し、再利用性を高めます。
-
-#### **src/services/ - データアクセス層**
-
-  - `firebase/`: Firebase関連のサービス（Auth、Firestore、Functionsなど）を抽象化します。
-  - `api/`: REST APIやCloud Functionsを呼び出すための関数を定義します。
-
-#### **src/store/ - 状態管理**
-
-  - `slices/`: アプリケーションの各ドメイン（認証、ユーザー、予約など）の状態を管理するZustandストアのスライスを定義します。
+miecar/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml
+│   │   ├── cd.yml
+│   │   ├── pr-check.yml
+│   │   └── release.yml
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.yml
+│   │   ├── feature_request.yml
+│   │   └── config.yml
+│   ├── pull_request_template.md
+│   └── CODEOWNERS
+├── .husky/
+│   ├── pre-commit
+│   ├── pre-push
+│   └── commit-msg
+├── .vscode/
+│   ├── settings.json
+│   ├── extensions.json
+│   └── launch.json
+├── app.json
+├── babel.config.js
+├── expo-env.d.ts
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── metro.config.js
+├── .env.example
+├── .env.local                # ← 版管理しない想定（.gitignoreで除外）
+├── .env.development          # ← 同上
+├── .env.staging              # ← 同上
+├── .env.production           # ← 同上
+├── .gitignore
+├── .eslintrc.js
+├── .prettierrc.js
+├── .prettierignore
+├── .editorconfig
+├── jest.config.js            # （必要なら残す。今回はテスト未使用の想定）
+├── commitlint.config.js
+├── lint-staged.config.js
+├── README.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── docs/
+│   ├── API.md
+│   ├── DEPLOYMENT.md
+│   ├── DEVELOPMENT.md
+│   ├── CHANGELOG.md          # ※ 片方に統一するなら後で削除/リンク
+│   └── USER_GUIDE.md
+├── legal/
+│   ├── privacy-policy.md
+│   ├── terms-of-service.md
+│   ├── licenses/
+│   │   ├── MIT.txt
+│   │   ├── Apache-2.0.txt
+│   │   └── BSD-3-Clause.txt
+│   └── third-party-licenses.json
+├── scripts/
+│   ├── build.sh
+│   ├── deploy.sh
+│   ├── setup.sh
+│   ├── test.sh               # テスト不要なら後で削除可
+│   ├── lint.sh
+│   └── prepare-release.sh
+├── app/                      # ← Expo Router ページ（トップ直下）
+│   ├── (auth)/
+│   │   ├── _layout.tsx
+│   │   ├── login.tsx
+│   │   ├── register.tsx
+│   │   ├── forgot-password.tsx
+│   │   ├── reset-password.tsx
+│   │   ├── forgot-email.tsx
+│   │   ├── verify-identity.tsx
+│   │   ├── family-join.tsx
+│   │   ├── family-create.tsx
+│   │   └── family-switch.tsx
+│   ├── (tabs)/
+│   │   ├── _layout.tsx
+│   │   ├── calendar.tsx
+│   │   ├── reservations.tsx
+│   │   ├── add-reservation.tsx
+│   │   ├── profile.tsx
+│   │   ├── settings.tsx
+│   │   └── help.tsx
+│   ├── help/
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx
+│   │   ├── how-to-use.tsx
+│   │   ├── faq.tsx
+│   │   ├── contact.tsx
+│   │   ├── about.tsx
+│   │   ├── privacy-policy.tsx
+│   │   ├── terms-of-service.tsx
+│   │   ├── licenses.tsx
+│   │   └── release-notes.tsx
+│   ├── modal/
+│   │   ├── reservation-detail.tsx
+│   │   ├── edit-reservation.tsx
+│   │   ├── account-settings.tsx
+│   │   ├── family-settings.tsx
+│   │   ├── delete-account.tsx
+│   │   ├── family-invite.tsx
+│   │   └── contact-form.tsx
+│   ├── _layout.tsx
+│   └── index.tsx
+├── components/
+│   ├── ui/
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.styles.ts
+│   │   │   └── index.ts
+│   │   ├── Input/
+│   │   │   ├── Input.tsx
+│   │   │   ├── Input.styles.ts
+│   │   │   └── index.ts
+│   │   ├── Modal/
+│   │   │   ├── Modal.tsx
+│   │   │   ├── Modal.styles.ts
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   ├── calendar/
+│   │   ├── CalendarView/
+│   │   │   ├── CalendarView.tsx
+│   │   │   ├── CalendarView.styles.ts
+│   │   │   └── index.ts
+│   │   ├── DayCell/
+│   │   │   ├── DayCell.tsx
+│   │   │   ├── DayCell.styles.ts
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   ├── reservation/
+│   │   ├── ReservationCard/
+│   │   │   ├── ReservationCard.tsx
+│   │   │   ├── ReservationCard.styles.ts
+│   │   │   └── index.ts
+│   │   ├── ReservationForm/
+│   │   │   ├── ReservationForm.tsx
+│   │   │   ├── ReservationForm.styles.ts
+│   │   │   └── index.ts
+│   │   ├── ReservationList/
+│   │   │   ├── ReservationList.tsx
+│   │   │   ├── ReservationList.styles.ts
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   ├── common/
+│   │   ├── Header/
+│   │   │   ├── Header.tsx
+│   │   │   ├── Header.styles.ts
+│   │   │   └── index.ts
+│   │   ├── Loading/
+│   │   │   ├── Loading.tsx
+│   │   │   ├── Loading.styles.ts
+│   │   │   └── index.ts
+│   │   ├── ErrorBoundary/
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   └── index.ts
+│   │   ├── WebView/
+│   │   │   ├── WebView.tsx
+│   │   │   ├── WebView.styles.ts
+│   │   │   └── index.ts
+│   │   └── index.ts
+│   └── help/
+│       ├── HelpCard/
+│       │   ├── HelpCard.tsx
+│       │   ├── HelpCard.styles.ts
+│       │   └── index.ts
+│       ├── FAQItem/
+│       │   ├── FAQItem.tsx
+│       │   ├── FAQItem.styles.ts
+│       │   └── index.ts
+│       ├── ContactForm/
+│       │   ├── ContactForm.tsx
+│       │   ├── ContactForm.styles.ts
+│       │   └── index.ts
+│       ├── VersionInfo/
+│       │   ├── VersionInfo.tsx
+│       │   ├── VersionInfo.styles.ts
+│       │   └── index.ts
+│       ├── LicenseList/
+│       │   ├── LicenseList.tsx
+│       │   ├── LicenseList.styles.ts
+│       │   └── index.ts
+│       └── index.ts
+├── hooks/
+│   ├── auth/
+│   │   ├── useAuth.ts
+│   │   ├── useAuthUser.ts
+│   │   ├── usePasswordReset.ts
+│   │   ├── useEmailRecovery.ts
+│   │   ├── useAccountDeletion.ts
+│   │   ├── useFamilyManagement.ts
+│   │   └── index.ts
+│   ├── firebase/
+│   │   ├── useFirestore.ts
+│   │   ├── useRealtimeData.ts
+│   │   └── index.ts
+│   ├── reservation/
+│   │   ├── useReservations.ts
+│   │   ├── useCreateReservation.ts
+│   │   ├── useUpdateReservation.ts
+│   │   ├── useDeleteReservation.ts
+│   │   └── index.ts
+│   ├── calendar/
+│   │   ├── useCalendar.ts
+│   │   ├── useCalendarData.ts
+│   │   └── index.ts
+│   ├── notification/
+│   │   ├── useNotification.ts
+│   │   ├── usePushNotification.ts
+│   │   └── index.ts
+│   └── common/
+│       ├── useAsyncStorage.ts
+│       ├── useNetworkStatus.ts
+│       └── index.ts
+├── services/
+│   ├── firebase/
+│   │   ├── config.ts
+│   │   ├── auth.ts
+│   │   ├── authHelpers.ts
+│   │   ├── firestore.ts
+│   │   ├── functions.ts
+│   │   ├── messaging.ts
+│   │   └── index.ts
+│   ├── api/
+│   │   ├── auth.ts
+│   │   ├── passwordReset.ts
+│   │   ├── emailRecovery.ts
+│   │   ├── accountManagement.ts
+│   │   ├── reservations.ts
+│   │   ├── families.ts
+│   │   ├── users.ts
+│   │   ├── contact.ts
+│   │   ├── feedback.ts
+│   │   └── index.ts
+│   ├── storage/
+│   │   ├── asyncStorage.ts
+│   │   ├── secureStore.ts
+│   │   └── index.ts
+│   └── index.ts
+├── store/
+│   ├── slices/
+│   │   ├── auth.slice.ts
+│   │   ├── user.slice.ts
+│   │   ├── family.slice.ts
+│   │   ├── activeFamily.slice.ts
+│   │   ├── reservation.slice.ts
+│   │   ├── calendar.slice.ts
+│   │   ├── notification.slice.ts
+│   │   └── app.slice.ts
+│   ├── middlewares/
+│   │   ├── logger.ts
+│   │   └── persistence.ts
+│   ├── store.ts
+│   └── index.ts
+├── types/
+│   ├── api/
+│   │   ├── auth.ts
+│   │   ├── reservation.ts
+│   │   ├── family.ts
+│   │   ├── user.ts
+│   │   ├── contact.ts
+│   │   └── feedback.ts
+│   ├── entities/
+│   │   ├── User.ts
+│   │   ├── Reservation.ts
+│   │   ├── Family.ts
+│   │   ├── FamilyMember.ts
+│   │   ├── UserFamily.ts
+│   │   ├── Notification.ts
+│   │   ├── ContactMessage.ts
+│   │   ├── FAQ.ts
+│   │   ├── AppInfo.ts
+│   │   └── License.ts
+│   ├── navigation/
+│   │   ├── AuthNavigator.ts
+│   │   ├── MainNavigator.ts
+│   │   └── index.ts
+│   └── common/
+│       ├── Response.ts
+│       ├── Error.ts
+│       └── Pagination.ts
+├── utils/
+│   ├── date/
+│   │   ├── formatDate.ts
+│   │   ├── dateCalculations.ts
+│   │   └── index.ts
+│   ├── validation/
+│   │   ├── schemas.ts
+│   │   ├── validators.ts
+│   │   └── index.ts
+│   ├── helpers/
+│   │   ├── asyncWrapper.ts
+│   │   ├── errorHandler.ts
+│   │   ├── debounce.ts
+│   │   └── index.ts
+│   ├── formatters/
+│   │   ├── text.ts
+│   │   ├── number.ts
+│   │   └── index.ts
+│   └── index.ts
+├── constants/
+│   ├── theme/
+│   │   ├── colors.ts
+│   │   ├── fonts.ts
+│   │   ├── spacing.ts
+│   │   ├── dimensions.ts
+│   │   └── index.ts
+│   ├── config/
+│   │   ├── app.ts
+│   │   ├── api.ts
+│   │   ├── contact.ts
+│   │   └── index.ts
+│   ├── data/
+│   │   ├── faq.ts
+│   │   ├── licenses.ts
+│   │   ├── helpGuides.ts
+│   │   └── index.ts
+│   └── strings/
+│       ├── ja.ts
+│       ├── en.ts
+│       └── index.ts
+└── assets/
+    ├── images/
+    │   ├── icons/
+    │   │   ├── calendar.png
+    │   │   ├── car.png
+    │   │   └── user.png
+    │   ├── illustrations/
+    │   │   ├── empty-state.png
+    │   │   └── onboarding.png
+    │   └── backgrounds/
+    │       ├── splash.png
+    │       └── login-bg.png
+    ├── fonts/
+    │   ├── NotoSansJP-Regular.ttf
+    │   ├── NotoSansJP-Bold.ttf
+    │   └── index.ts
+    └── animations/
+        ├── loading.json
+        └── success.json
 
 -----
 
@@ -101,55 +384,5 @@ src/
   - `ComponentName.styles.ts`: スタイル定義。
   - `index.ts`: コンポーネントのエクスポート。
 
-#### **4. 絶対パス設定**
-
-`tsconfig.json`でパスエイリアスを設定し、コードの可読性と保守性を高めます。
-
-```json
-{
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      // ... その他のパスエイリアス
-    }
-  }
-}
-```
-
------
-
-### 4\. 拡張機能の実装設計
-
-#### **1. 拡張認証機能**
-
-  - **パスワードリセット**: Firebase Authの`sendPasswordResetEmail`を使用し、ユーザーを安全なWebページに誘導するフローを実装します。
-  - **メールアドレス復旧**: 電話番号とセキュリティ質問による本人確認を行い、Cloud Functions経由でメールアドレスをSMSで通知します。
-  - **アカウント削除**: ユーザーのデータを論理削除し、個人情報をマスクします。Firebase Authからもユーザーを削除します。
-  - **複数ファミリー管理**: ユーザーとファミリーの関連をFirestoreの`UserFamily`コレクションで管理し、複数の家族グループへの参加・切り替えを可能にします。
-
-#### **2. ヘルプ・サポート機能**
-
-  - **お問い合わせ**: Firestoreにメッセージを保存し、Cloud Functionsで管理者に自動通知します。添付ファイルもFirebase Storageで管理します。
-  - **FAQ**: 静的データとして管理し、カテゴリ別フィルタリングや検索機能を実装します。
-  - **アプリ情報**: ExpoのAPIを使用して、バージョン、デバイス情報、リリースチャンネルなどを取得し、表示します。
-
------
-
-### 5\. 開発環境・CI/CD設定
-
-#### **1. パッケージ依存関係**
-
-  - **開発ツール**: `eslint`, `prettier`, `jest`, `husky`などを使用し、開発効率とコード品質を向上させます。
-
-#### **2. 自動化ツール設定**
-
-  - **ESLint**: コードの静的解析と品質チェックを自動で行います。
-  - **Prettier**: コードフォーマットを統一し、スタイルのばらつきを防ぎます。
-  - **Husky**: `pre-commit`や`pre-push`フックを設定し、コミットやプッシュ前に自動でテストやリントを実行します。
-  - **GitHub Actions**:
-      - `ci.yml`: Pull Requestごとに自動でコード品質チェック（lint, test, build）を実行します。
-      - `cd.yml`: `main`ブランチへのマージやタグ付けをトリガーに、自動でデプロイを行います。
 
 これらの設計と規約に従うことで、一貫性があり、スケーラブルで、共同開発に適したアプリケーションを構築します。
