@@ -58,7 +58,14 @@ jobs:
 
       - name: Check for sensitive data
         run: |
-          if grep -r "password\|secret\|key\|token" app/ components/ hooks/ constants/ --include="*.ts" --include="*.tsx" | grep -v "//\|/\*"; then
+          # 実際の機密情報のパターンを検出（変数代入や文字列リテラル）
+          if grep -r -E "(password\s*=|secret\s*=|token\s*=|api_key\s*=|private_key\s*=)" app/ components/ hooks/ constants/ --include="*.ts" --include="*.tsx" | grep -v -E "(//|/\*|console\.log|example|test|mock)"; then
             echo "Warning: Potential sensitive data found in code"
+            exit 1
+          fi
+
+          # ハードコードされた機密情報の検出
+          if grep -r -E "['\"][a-zA-Z0-9]{32,}['\"]" app/ components/ hooks/ constants/ --include="*.ts" --include="*.tsx" | grep -v -E "(//|/\*|example|test|mock)"; then
+            echo "Warning: Potential hardcoded secrets found in code"
             exit 1
           fi
