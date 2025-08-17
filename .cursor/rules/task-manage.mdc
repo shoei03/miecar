@@ -1,0 +1,419 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# 家族車共有アプリ - 実装ロードマップとタスク分割
+
+## 開発スケジュール概要
+
+**総開発期間**: 約12-16週間  
+**チーム構成想定**: 2-3名（フロントエンド・バックエンド・UI/UX）  
+**リリース戦略**: MVP → 段階的機能追加
+
+---
+
+## Phase 0: プロジェクトセットアップ（Week 1）
+
+### 🔧 開発環境構築 - Priority: Critical
+**工数**: 3-5日
+
+#### Task 0.1: プロジェクト初期化
+- [ ] Expo プロジェクト作成
+- [ ] TypeScript設定
+- [ ] フォルダ構造作成
+- [ ] 基本依存関係インストール
+
+```bash
+npx create-expo-app family-car-scheduler --template
+npm install typescript @types/react @types/react-native
+npm install -D eslint prettier husky lint-staged
+```
+
+#### Task 0.2: 開発ツール設定
+- [ ] ESLint設定ファイル作成
+- [ ] Prettier設定ファイル作成
+- [ ] Git hooks設定（Husky）
+- [ ] VSCode設定ファイル作成
+- [ ] GitHub repository初期化
+
+#### Task 0.3: CI/CD環境構築
+- [ ] GitHub Actions workflows作成
+- [ ]環境変数設定
+- [ ] Expo EAS設定
+- [ ] Firebase プロジェクト作成
+
+#### Task 0.4: 設計文書準備
+- [ ] API仕様書作成
+- [ ] データベース設計確定
+- [ ] UI/UXデザインシステム定義
+
+**完了基準**: ローカル開発環境でExpoアプリが起動し、リンター・フォーマッターが動作すること
+
+---
+
+## Phase 1: 基本認証・Core機能（Week 2-4）
+
+### 🔐 認証システム基盤 - Priority: Critical
+**工数**: 1-2週間
+
+#### Task 1.1: Firebase設定
+- [ ] Firebase プロジェクト設定
+- [ ] Firebase Authentication設定
+- [ ] Firestore設定
+- [ ] Firebase設定ファイル作成
+
+```typescript
+// 実装ファイル例
+src/lib/firebase/config.ts
+src/lib/firebase/auth.ts
+src/lib/firebase/firestore.ts
+```
+
+#### Task 1.2: 基本認証機能
+- [ ] ログイン画面作成
+- [ ] 新規登録画面作成
+- [ ] Firebase Auth連携
+- [ ] 認証状態管理（Zustand）
+- [ ] 認証ルーティング設定
+
+```typescript
+// 主要コンポーネント
+src/app/(auth)/login.tsx
+src/app/(auth)/register.tsx
+src/hooks/auth/useAuth.ts
+src/store/slices/authSlice.ts
+```
+
+#### Task 1.3: ユーザープロフィール管理
+- [ ] ユーザー情報Firestoreスキーマ作成
+- [ ] プロフィール編集画面作成
+- [ ] アバター画像アップロード機能
+- [ ] ユーザー情報取得・更新API
+
+**完了基準**: ユーザー登録・ログイン・プロフィール編集が正常に動作すること
+
+### 👨‍👩‍👧‍👦 家族グループ管理 - Priority: High
+**工数**: 1週間
+
+#### Task 1.4: 家族グループ基本機能
+- [ ] 家族グループ作成機能
+- [ ] 招待コード生成・参加機能
+- [ ] 家族メンバー一覧表示
+- [ ] userFamilies中間テーブル実装
+
+```typescript
+// Cloud Functions
+functions/src/familyManagement.ts
+// フロントエンド
+src/hooks/auth/useFamilyManagement.ts
+src/app/(auth)/family-create.tsx
+src/app/(auth)/family-join.tsx
+```
+
+**完了基準**: 家族グループの作成・参加・表示が正常に動作すること
+
+---
+
+## Phase 2: カレンダー・予約システム（Week 5-7）
+
+### 📅 カレンダー機能 - Priority: Critical
+**工数**: 1.5週間
+
+#### Task 2.1: カレンダー基本実装
+- [ ] react-native-calendars導入・設定
+- [ ] カレンダーコンポーネント作成
+- [ ] 月表示・日表示切り替え
+- [ ] 予約データとの連携
+
+```typescript
+// 主要ファイル
+src/components/calendar/CalendarView/CalendarView.tsx
+src/hooks/calendar/useCalendar.ts
+src/store/slices/calendarSlice.ts
+```
+
+#### Task 2.2: 予約システム Core
+- [ ] 予約データモデル設計・実装
+- [ ] 予約作成フォーム
+- [ ] 予約一覧表示
+- [ ] 予約詳細・編集・削除機能
+
+```typescript
+// Firestore Schema
+/reservations/{reservationId}
+// Components
+src/components/reservation/ReservationForm/
+src/components/reservation/ReservationCard/
+src/hooks/reservation/useReservations.ts
+```
+
+#### Task 2.3: カレンダー連携
+- [ ] カレンダー上での予約表示
+- [ ] 日付タップで予約作成
+- [ ] 予約の視覚的表示（色分け・アイコン）
+- [ ] 重複予約チェック機能
+
+**完了基準**: カレンダー表示、予約CRUD操作、家族間での予約共有が正常に動作すること
+
+### 🔄 リアルタイム同期 - Priority: High
+**工数**: 0.5週間
+
+#### Task 2.4: Firestore リアルタイム機能
+- [ ] Firestoreリスナー実装
+- [ ] リアルタイム予約更新
+- [ ] オフライン対応設定
+- [ ] エラーハンドリング
+
+```typescript
+src/hooks/firebase/useRealtimeData.ts
+src/services/firebase/realtimeSync.ts
+```
+
+**完了基準**: 家族メンバー間でのリアルタイム予約同期が正常に動作すること
+
+---
+
+## Phase 3: UI/UX改善・通知機能（Week 8-10）
+
+### 🎨 UI/UX ポリッシュ - Priority: Medium
+**工数**: 1週間
+
+#### Task 3.1: デザインシステム実装
+- [ ] カラーパレット・フォント定義
+- [ ] 共通UIコンポーネント作成
+- [ ] アニメーション・トランジション実装
+- [ ] レスポンシブデザイン対応
+
+```typescript
+src/constants/theme/colors.ts
+src/constants/theme/fonts.ts
+src/components/ui/Button/
+src/components/ui/Modal/
+```
+
+#### Task 3.2: ユーザビリティ向上
+- [ ] ローディング状態表示
+- [ ] エラー表示・処理改善
+- [ ] 空状態デザイン
+- [ ] アクセシビリティ対応
+
+### 🔔 通知システム - Priority: High
+**工数**: 1週間
+
+#### Task 3.3: プッシュ通知基盤
+- [ ] Expo Notifications設定
+- [ ] Firebase Cloud Messaging設定
+- [ ] デバイストークン管理
+- [ ] 通知権限リクエスト
+
+#### Task 3.4: 通知機能実装
+- [ ] 新規予約作成時通知
+- [ ] 予約変更時通知
+- [ ] リマインダー通知（予約30分前）
+- [ ] 通知設定画面
+
+```typescript
+// Cloud Functions
+functions/src/notifications.ts
+// フロントエンド
+src/hooks/notification/useNotification.ts
+src/services/firebase/messaging.ts
+```
+
+**完了基準**: プッシュ通知が適切なタイミングで家族メンバーに送信されること
+
+---
+
+## Phase 4: 高度な認証・セキュリティ（Week 11-12）
+
+### 🔒 拡張認証機能 - Priority: Medium
+**工数**: 1週間
+
+#### Task 4.1: パスワードリセット
+- [ ] パスワードリセット画面実装
+- [ ] Firebase Auth パスワードリセット連携
+- [ ] メール送信フロー
+- [ ] エラーハンドリング
+
+#### Task 4.2: メールアドレス復旧機能
+- [ ] 復旧質問設定画面
+- [ ] 電話番号認証機能
+- [ ] Cloud Functions復旧処理
+- [ ] SMS通知機能
+
+```typescript
+// Cloud Functions
+functions/src/emailRecovery.ts
+// フロントエンド
+src/app/(auth)/forgot-email.tsx
+src/hooks/auth/useEmailRecovery.ts
+```
+
+#### Task 4.3: アカウント管理
+- [ ] アカウント削除機能
+- [ ] 論理削除実装
+- [ ] データクリーンアップ処理
+
+### 🔐 セキュリティ強化 - Priority: High
+**工数**: 0.5週間
+
+#### Task 4.4: セキュリティ対策
+- [ ] Firestore Security Rules実装
+- [ ] 不正アクセス検知
+- [ ] セッション管理強化
+- [ ] 監査ログ実装
+
+**完了基準**: セキュリティ要件を満たした認証システムが動作すること
+
+---
+
+## Phase 5: 複数ファミリー・サポート機能（Week 13-14）
+
+### 👥 複数ファミリー対応 - Priority: Medium
+**工数**: 1週間
+
+#### Task 5.1: 複数ファミリー機能
+- [ ] アクティブファミリー切り替え
+- [ ] 家族招待システム改善
+- [ ] 家族間データ分離
+- [ ] 家族ロール管理（管理者・メンバー）
+
+```typescript
+src/store/slices/activeFamilySlice.ts
+src/app/(tabs)/family-switch.tsx
+src/hooks/auth/useFamilyManagement.ts
+```
+
+### 📞 サポート・ヘルプ機能 - Priority: Low
+**工数**: 0.5週間
+
+#### Task 5.2: ヘルプ・サポート
+- [ ] FAQ画面作成
+- [ ] お問い合わせフォーム
+- [ ] 使い方ガイド
+- [ ] バージョン情報表示
+
+```typescript
+src/app/help/
+src/components/help/
+src/constants/data/faq.ts
+```
+
+#### Task 5.3: アプリ情報機能
+- [ ] プライバシーポリシー表示
+- [ ] 利用規約表示
+- [ ] オープンソースライセンス表示
+- [ ] リリースノート表示
+
+**完了基準**: 複数家族での利用とユーザーサポート機能が正常に動作すること
+
+---
+
+## Phase 6: 最適化・リリース準備（Week 15-16）
+
+### ⚡ パフォーマンス最適化 - Priority: High
+**工数**: 0.5週間
+
+#### Task 6.1: パフォーマンス改善
+- [ ] バンドルサイズ最適化
+- [ ] 画像最適化
+- [ ] メモリリーク対策
+- [ ] レンダリング最適化
+
+#### Task 6.2: テスト・品質保証
+- [ ] ユニットテスト完成度向上（80%カバレッジ）
+- [ ] インテグレーションテスト実装
+- [ ] E2Eテスト実装
+- [ ] バグ修正・安定化
+
+### 🚀 リリース準備 - Priority: Critical
+**工数**: 0.5週間
+
+#### Task 6.3: リリース作業
+- [ ] App Store・Google Play用アセット準備
+- [ ] アプリストア申請
+- [ ] プロダクション環境設定
+- [ ] 監視・ログ設定
+
+**完了基準**: ストア審査を通過できる品質のアプリが完成すること
+
+---
+
+## 開発チーム別タスク分担
+
+### 👨‍💻 フロントエンド開発者
+**主要担当**: UI/UXコンポーネント、状態管理、ナビゲーション
+- Phase 1: 認証画面・ユーザー管理画面
+- Phase 2: カレンダーコンポーネント・予約フォーム
+- Phase 3: デザインシステム・アニメーション
+- Phase 5-6: ヘルプ機能・最適化
+
+### 🔧 バックエンド/インフラ開発者
+**主要担当**: Firebase設定、Cloud Functions、CI/CD
+- Phase 0: プロジェクトセットアップ・CI/CD構築
+- Phase 1: Firebase設定・認証システム
+- Phase 2: Firestore設計・リアルタイム同期
+- Phase 3-4: 通知システム・セキュリティ強化
+
+### 🎨 UI/UX担当
+**主要担当**: デザインシステム、ユーザビリティ
+- Phase 0-1: デザインシステム設計・プロトタイプ
+- Phase 2-3: UI改善・ユーザビリティテスト
+- Phase 5-6: ヘルプコンテンツ・最終調整
+
+---
+
+## リスク管理・代替案
+
+### 🚨 主要リスクと対策
+
+#### 技術的リスク
+**リスク**: Firebase制限・パフォーマンス問題  
+**対策**: 早期のパフォーマンステスト・代替バックエンド検討
+
+**リスク**: React Native・Expoのバージョン互換性  
+**対策**: LTSバージョン使用・段階的アップデート
+
+#### スケジュールリスク
+**リスク**: 機能開発の遅延  
+**対策**: MVP機能優先・段階的リリース
+
+**リスク**: ストア審査の遅延  
+**対策**: 早期の審査ガイドライン確認・十分な余裕期間
+
+### 📱 MVP機能定義
+
+#### 必須機能（絶対に含める）
+- [ ] ユーザー登録・ログイン
+- [ ] 家族グループ作成・参加
+- [ ] カレンダー表示
+- [ ] 予約作成・編集・削除
+- [ ] リアルタイム同期
+- [ ] 基本的な通知機能
+
+#### 延期可能機能
+- [ ] メールアドレス復旧
+- [ ] 複数ファミリー対応
+- [ ] 高度な通知設定
+- [ ] 詳細なヘルプ機能
+
+---
+
+## 週次マイルストーン
+
+| Week | 主要デリバラブル | 成功基準 |
+|------|------------------|----------|
+| 1 | 開発環境完成 | ローカル開発開始可能 |
+| 2-3 | 認証システム完成 | ユーザー登録・ログイン動作 |
+| 4 | 家族グループ機能完成 | 家族招待・参加動作 |
+| 5-6 | カレンダー・予約システム完成 | 基本予約機能動作 |
+| 7 | リアルタイム同期完成 | 家族間データ同期動作 |
+| 8-9 | UI/UX改善完成 | 使いやすいインターフェース |
+| 10 | 通知システム完成 | プッシュ通知動作 |
+| 11-12 | セキュリティ強化完成 | セキュアな認証システム |
+| 13-14 | 拡張機能完成 | 複数ファミリー・サポート機能 |
+| 15-16 | リリース準備完成 | ストア申請準備完了 |
+
+この計画に従って開発を進めることで、段階的かつ確実にアプリケーションを完成させることができます。
