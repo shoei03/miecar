@@ -125,78 +125,62 @@ miecar/
 │   ├── ui/
 │   │   ├── Button/
 │   │   │   ├── Button.tsx
-│   │   │   ├── Button.styles.ts
 │   │   │   └── index.ts
 │   │   ├── Input/
 │   │   │   ├── Input.tsx
-│   │   │   ├── Input.styles.ts
 │   │   │   └── index.ts
 │   │   ├── Modal/
 │   │   │   ├── Modal.tsx
-│   │   │   ├── Modal.styles.ts
 │   │   │   └── index.ts
 │   │   └── index.ts
 │   ├── calendar/
 │   │   ├── CalendarView/
 │   │   │   ├── CalendarView.tsx
-│   │   │   ├── CalendarView.styles.ts
 │   │   │   └── index.ts
 │   │   ├── DayCell/
 │   │   │   ├── DayCell.tsx
-│   │   │   ├── DayCell.styles.ts
 │   │   │   └── index.ts
 │   │   └── index.ts
 │   ├── reservation/
 │   │   ├── ReservationCard/
 │   │   │   ├── ReservationCard.tsx
-│   │   │   ├── ReservationCard.styles.ts
 │   │   │   └── index.ts
 │   │   ├── ReservationForm/
 │   │   │   ├── ReservationForm.tsx
-│   │   │   ├── ReservationForm.styles.ts
 │   │   │   └── index.ts
 │   │   ├── ReservationList/
 │   │   │   ├── ReservationList.tsx
-│   │   │   ├── ReservationList.styles.ts
 │   │   │   └── index.ts
 │   │   └── index.ts
 │   ├── common/
 │   │   ├── Header/
 │   │   │   ├── Header.tsx
-│   │   │   ├── Header.styles.ts
 │   │   │   └── index.ts
 │   │   ├── Loading/
 │   │   │   ├── Loading.tsx
-│   │   │   ├── Loading.styles.ts
 │   │   │   └── index.ts
 │   │   ├── ErrorBoundary/
 │   │   │   ├── ErrorBoundary.tsx
 │   │   │   └── index.ts
 │   │   ├── WebView/
 │   │   │   ├── WebView.tsx
-│   │   │   ├── WebView.styles.ts
 │   │   │   └── index.ts
 │   │   └── index.ts
 │   └── help/
 │       ├── HelpCard/
 │       │   ├── HelpCard.tsx
-│       │   ├── HelpCard.styles.ts
 │       │   └── index.ts
 │       ├── FAQItem/
 │       │   ├── FAQItem.tsx
-│       │   ├── FAQItem.styles.ts
 │       │   └── index.ts
 │       ├── ContactForm/
 │       │   ├── ContactForm.tsx
-│       │   ├── ContactForm.styles.ts
 │       │   └── index.ts
 │       ├── VersionInfo/
 │       │   ├── VersionInfo.tsx
-│       │   ├── VersionInfo.styles.ts
 │       │   └── index.ts
 │       ├── LicenseList/
 │       │   ├── LicenseList.tsx
-│       │   ├── LicenseList.styles.ts
 │       │   └── index.ts
 │       └── index.ts
 ├── hooks/
@@ -376,13 +360,9 @@ miecar/
 3.  **内部インポート**（絶対パス）
 4.  **型インポート**
 
-#### **3. コンポーネント構成パターン**
+#### **4. デザイン原則**
 
-各コンポーネントは、以下のファイルで構成されることを基本とします。
-
-  - `ComponentName.tsx`: メインコンポーネントの定義。
-  - `ComponentName.styles.ts`: スタイル定義。
-  - `index.ts`: コンポーネントのエクスポート。
+- NativewindCSSを使用すること
 
 
 これらの設計と規約に従うことで、一貫性があり、スケーラブルで、共同開発に適したアプリケーションを構築します。
