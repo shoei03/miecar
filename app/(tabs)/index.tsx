@@ -190,72 +190,72 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* 表示切り替え */}
-        {viewMode === 'calendar' ? (
-          <>
-            <View style={styles.calendar}>
-              <View style={styles.weekDays}>
-                {['日', '月', '火', '水', '木', '金', '土'].map(day => (
-                  <Text key={day} style={styles.weekDayText}>
-                    {day}
-                  </Text>
-                ))}
-              </View>
-              <View style={styles.daysContainer}>{renderCalendar()}</View>
+      {/* 表示切り替え */}
+      {viewMode === 'calendar' ? (
+        <>
+          <View style={styles.calendar}>
+            <View style={styles.weekDays}>
+              {['日', '月', '火', '水', '木', '金', '土'].map(day => (
+                <Text key={day} style={styles.weekDayText}>
+                  {day}
+                </Text>
+              ))}
             </View>
-            <View style={styles.calendarDivider} />
-          </>
-        ) : (
-          <View style={styles.listContainer}>
-            {/* 日ごとにグループ化して表示 */}
-            {Array.from(
-              { length: getDaysInMonth(currentDate) },
-              (_, i) => i + 1
-            ).map(day => {
-              const schedules = mockSchedules.filter(s => s.date === day);
-              return (
-                <View key={day} style={styles.listDayRow}>
-                  <View style={styles.listDayBox}>
-                    <Text style={styles.listDayText}>{day}</Text>
-                  </View>
-                  <View style={styles.listSchedulesBox}>
-                    {schedules.length === 0 ? (
-                      <Text style={styles.listNoSchedule}>予定なし</Text>
-                    ) : (
-                      schedules.map(schedule => (
-                        <View key={schedule.id} style={styles.listScheduleItem}>
-                          <Text
-                            style={[
-                              styles.listScheduleName,
-                              { color: schedule.color },
-                            ]}
-                          >
-                            {schedule.userName}
+            <View style={styles.daysContainer}>{renderCalendar()}</View>
+          </View>
+          <View style={styles.calendarDivider} />
+        </>
+      ) : (
+        <View style={styles.listContainer}>
+          {/* 日ごとにグループ化して表示 */}
+          {Array.from(
+            { length: getDaysInMonth(currentDate) },
+            (_, i) => i + 1
+          ).map(day => {
+            const schedules = mockSchedules.filter(s => s.date === day);
+            return (
+              <View key={day} style={styles.listDayRow}>
+                <View style={styles.listDayBox}>
+                  <Text style={styles.listDayText}>{day}</Text>
+                </View>
+                <View style={styles.listSchedulesBox}>
+                  {schedules.length === 0 ? (
+                    <Text style={styles.listNoSchedule}>予定なし</Text>
+                  ) : (
+                    schedules.map(schedule => (
+                      <View key={schedule.id} style={styles.listScheduleItem}>
+                        <Text
+                          style={[
+                            styles.listScheduleName,
+                            { color: schedule.color },
+                          ]}
+                        >
+                          {schedule.userName}
+                        </Text>
+                        <View style={styles.scheduleTime}>
+                          <Text style={styles.timeText}>
+                            {schedule.startTime}
                           </Text>
-                          <View style={styles.scheduleTime}>
-                            <Text style={styles.timeText}>
-                              {schedule.startTime}
-                            </Text>
-                            <Text style={styles.timeSeparator}>-</Text>
-                            <Text style={styles.timeText}>
-                              {schedule.endTime}
-                            </Text>
-                          </View>
-                          <Text style={styles.schedulePurpose}>
-                            {schedule.purpose}
+                          <Text style={styles.timeSeparator}>-</Text>
+                          <Text style={styles.timeText}>
+                            {schedule.endTime}
                           </Text>
                         </View>
-                      ))
-                    )}
-                  </View>
+                        <Text style={styles.schedulePurpose}>
+                          {schedule.purpose}
+                        </Text>
+                      </View>
+                    ))
+                  )}
                 </View>
-              );
-            })}
-          </View>
-        )}
+              </View>
+            );
+          })}
+        </View>
+      )}
 
-        {/* 選択された日の詳細（カレンダー表示時のみ） */}
+      {/* 選択された日の詳細（カレンダー表示時のみ） */}
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {viewMode === 'calendar' && (
           <View style={styles.selectedDateSection}>
             <Text style={styles.selectedDateText}>
