@@ -8,25 +8,16 @@ import ModalContents from '@/components/ui/ModalContents';
 import { mockSchedules } from '@/mock/schedule';
 
 export default function HomeScreen() {
-  const [currentDate] = useState(new Date()); // 現在日付
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar'); // 表示モード追加
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
-      <CalendarHeader
-        viewMode={viewMode}
-        currentDate={currentDate}
-        setViewMode={setViewMode}
-      />
+      <CalendarHeader viewMode={viewMode} setViewMode={setViewMode} />
 
       {/* カレンダーのコンテンツ */}
-      <CalendarView
-        viewMode={viewMode}
-        currentDate={currentDate}
-        mockSchedules={mockSchedules}
-      />
+      <CalendarView viewMode={viewMode} mockSchedules={mockSchedules} />
 
       {/* 予定を追加するボタン */}
       <Button setModalVisible={setModalVisible} label='予定を追加' />

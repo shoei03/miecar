@@ -1,22 +1,19 @@
-import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import UnitSchedule from '@/components/ui/UnitSchedule';
+import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
 export default function CalendarView({
   viewMode,
-  currentDate,
   mockSchedules,
 }: {
   viewMode: 'calendar' | 'list';
-  currentDate: Date;
   mockSchedules: ScheduleType[];
 }) {
-  const today = new Date();
-  const [selectedDate] = useState(today.getDate());
+  const { today, currentYear, currentMonth, currentDate } = useDayStore();
 
   return (
     <>
@@ -36,7 +33,7 @@ export default function CalendarView({
       ) : (
         <CalendarListContents
           mockSchedules={mockSchedules}
-          currentDate={currentDate}
+          currentDate={today}
         />
       )}
 
@@ -48,12 +45,11 @@ export default function CalendarView({
         {viewMode === 'calendar' && (
           <View style={styles.selectedDateSection}>
             <Text style={styles.selectedDateText}>
-              {currentDate.getFullYear()}年{currentDate.getMonth() + 1}月
-              {selectedDate}日 (火)
+              {currentYear}年{currentMonth + 1}月{currentDate}日 (火)
             </Text>
             <UnitSchedule
               mockSchedules={mockSchedules}
-              selectedDate={selectedDate}
+              selectedDate={currentDate}
             />
           </View>
         )}

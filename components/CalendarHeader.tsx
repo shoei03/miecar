@@ -1,19 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import ToggleGroups from '@/components/ui/ToggleGroups';
+import { useDayStore } from '@/hooks/use-store';
 
 export default function CalendarHeader({
-  currentDate,
   viewMode,
   setViewMode,
 }: {
-  currentDate: Date;
   viewMode: 'calendar' | 'list';
   setViewMode: (mode: 'calendar' | 'list') => void;
 }) {
-  const formatMonthYear = (date: Date) => {
-    return `${date.getFullYear()}年${date.getMonth() + 1}月`;
-  };
+  const { currentYear, currentMonth } = useDayStore(state => state);
 
   return (
     <View style={styles.header}>
@@ -22,7 +19,7 @@ export default function CalendarHeader({
       </View>
       <View style={styles.headerCenter}>
         <Text style={styles.headerMonthText}>
-          {formatMonthYear(currentDate)}
+          {currentYear}年{currentMonth + 1}月
         </Text>
       </View>
       <View style={styles.headerRight}>
