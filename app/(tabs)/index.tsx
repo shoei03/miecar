@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 
 import CalendarHeader from '@/components/CalendarHeader';
+import CalendarView from '@/components/CalendarView';
 import Button from '@/components/ui/Button';
-import CalendarContents from '@/components/ui/CalendarContents';
-import CalendarListContents from '@/components/ui/CalendarListContents';
 import ModalContents from '@/components/ui/ModalContents';
 import UnitSchedule from '@/components/ui/UnitSchedule';
 import { mockSchedules } from '@/mock/schedule';
@@ -27,34 +26,20 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
       <CalendarHeader
-        currentDate={currentDate}
         viewMode={viewMode}
+        currentDate={currentDate}
         setViewMode={setViewMode}
       />
 
-      {/* 表示切り替え */}
-      {viewMode === 'calendar' ? (
-        <>
-          <View style={styles.calendar}>
-            <View style={styles.weekDays}>
-              {['日', '月', '火', '水', '木', '金', '土'].map(day => (
-                <Text key={day} style={styles.weekDayText}>
-                  {day}
-                </Text>
-              ))}
-            </View>
-            <View style={styles.daysContainer}>
-              <CalendarContents mockSchedules={mockSchedules} />
-            </View>
-          </View>
-          <View style={styles.calendarDivider} />
-        </>
-      ) : (
-        <CalendarListContents
-          mockSchedules={mockSchedules}
-          currentDate={currentDate}
-        />
-      )}
+      {/* カレンダーのコンテンツ */}
+      <CalendarView
+        viewMode={viewMode}
+        currentDate={currentDate}
+        mockSchedules={mockSchedules}
+      />
+
+      {/* カレンダーとリストの間の区切り線 */}
+      <View style={styles.calendarDivider} />
 
       {/* 選択された日の詳細（カレンダー表示時のみ） */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -72,6 +57,7 @@ export default function HomeScreen() {
           </View>
         )}
       </ScrollView>
+
       {/* 予定追加モーダル */}
       <Modal
         visible={modalVisible}
@@ -93,27 +79,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  calendar: {
-    marginHorizontal: 20,
-    marginBottom: 24,
-  },
-  weekDays: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
-  },
-  weekDayText: {
-    fontSize: 14,
-    color: '#8E8E93',
-    fontWeight: '500',
-  },
-  daysContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingTop: 8,
   },
   selectedDateSection: {
     marginHorizontal: 20,
