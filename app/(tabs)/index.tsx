@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import ModalContents from '@/components/ui/ModalContents';
+import ToggleGroups from '@/components/ui/ToggleGroups';
 
 interface Schedule {
   id: string;
@@ -177,41 +178,7 @@ export default function HomeScreen() {
       {/* ヘッダー */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <TouchableOpacity
-            onPress={() =>
-              setViewMode(viewMode === 'calendar' ? 'list' : 'calendar')
-            }
-            style={styles.toggleGroup}
-          >
-            <View
-              style={[
-                styles.toggleIconButton,
-                viewMode === 'calendar'
-                  ? styles.toggleActive
-                  : styles.toggleInactive,
-              ]}
-            >
-              <Ionicons
-                name='calendar'
-                size={20}
-                color={viewMode === 'calendar' ? '#34C759' : '#8E8E93'}
-              />
-            </View>
-            <View
-              style={[
-                styles.toggleIconButton,
-                viewMode === 'list'
-                  ? styles.toggleActive
-                  : styles.toggleInactive,
-              ]}
-            >
-              <Ionicons
-                name='list'
-                size={20}
-                color={viewMode === 'list' ? '#007AFF' : '#8E8E93'}
-              />
-            </View>
-          </TouchableOpacity>
+          <ToggleGroups viewMode={viewMode} setViewMode={setViewMode} />
         </View>
         <View style={styles.headerCenter}>
           <Text style={styles.headerMonthText}>
@@ -219,12 +186,7 @@ export default function HomeScreen() {
           </Text>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity>
-            <Ionicons name='help-circle-outline' size={24} color='#8E8E93' />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name='settings-outline' size={24} color='#8E8E93' />
-          </TouchableOpacity>
+          {/* TODO:家族カレンダーの切り替えボタンを設置 */}
         </View>
       </View>
 
@@ -504,28 +466,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#8E8E93',
     marginTop: 4,
-  },
-  toggleGroup: {
-    flexDirection: 'row',
-    gap: 0,
-    borderRadius: 16,
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-  },
-  toggleIconButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  toggleActive: {
-    backgroundColor: '#eafbe7',
-  },
-  toggleInactive: {
-    backgroundColor: '#fff',
   },
   listContainer: {
     marginHorizontal: 20,
