@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 
+import CalendarHeader from '@/components/CalendarHeader';
 import Button from '@/components/ui/Button';
 import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import ModalContents from '@/components/ui/ModalContents';
-import ToggleGroups from '@/components/ui/ToggleGroups';
 import UnitSchedule from '@/components/ui/UnitSchedule';
 import { mockSchedules } from '@/mock/schedule';
 
@@ -23,26 +23,14 @@ export default function HomeScreen() {
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar'); // 表示モード追加
   const [modalVisible, setModalVisible] = useState(false);
 
-  const formatMonthYear = (date: Date) => {
-    return `${date.getFullYear()}年${date.getMonth() + 1}月`;
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <ToggleGroups viewMode={viewMode} setViewMode={setViewMode} />
-        </View>
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerMonthText}>
-            {formatMonthYear(currentDate)}
-          </Text>
-        </View>
-        <View style={styles.headerRight}>
-          {/* TODO:家族カレンダーの切り替えボタンを設置 */}
-        </View>
-      </View>
+      <CalendarHeader
+        currentDate={currentDate}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
 
       {/* 表示切り替え */}
       {viewMode === 'calendar' ? (
@@ -102,35 +90,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    paddingTop: 16,
-  },
-  headerLeft: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'flex-start',
-  },
-  headerCenter: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerMonthText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1C1C1E',
-  },
-  headerRight: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'flex-end',
   },
   content: {
     flex: 1,
