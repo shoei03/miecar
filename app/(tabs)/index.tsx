@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
   Modal,
@@ -6,14 +5,15 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
+import Button from '@/components/ui/Button';
 import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import ModalContents from '@/components/ui/ModalContents';
 import ToggleGroups from '@/components/ui/ToggleGroups';
+import UnitSchedule from '@/components/ui/UnitSchedule';
 import { mockSchedules } from '@/mock/schedule';
 
 export default function HomeScreen() {
@@ -25,10 +25,6 @@ export default function HomeScreen() {
 
   const formatMonthYear = (date: Date) => {
     return `${date.getFullYear()}年${date.getMonth() + 1}月`;
-  };
-
-  const getSelectedSchedules = () => {
-    return mockSchedules.filter(schedule => schedule.date === selectedDate);
   };
 
   return (
@@ -80,37 +76,11 @@ export default function HomeScreen() {
               {currentDate.getFullYear()}年{currentDate.getMonth() + 1}月
               {selectedDate}日 (火)
             </Text>
-            {getSelectedSchedules().length > 0 ? (
-              <View>
-                {getSelectedSchedules().map(schedule => (
-                  <View key={schedule.id} style={styles.scheduleDetail}>
-                    <View style={styles.scheduleTime}>
-                      <Text style={styles.timeText}>{schedule.startTime}</Text>
-                      <Text style={styles.timeSeparator}>-</Text>
-                      <Text style={styles.timeText}>{schedule.endTime}</Text>
-                    </View>
-                    <Text style={styles.schedulePurpose}>
-                      {schedule.purpose}
-                    </Text>
-                  </View>
-                ))}
-                <TouchableOpacity
-                  style={styles.addScheduleButton}
-                  onPress={() => setModalVisible(true)}
-                >
-                  <Ionicons name='add' size={20} color='#34C759' />
-                  <Text style={styles.addScheduleText}>予定を追加</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                style={styles.addScheduleButton}
-                onPress={() => setModalVisible(true)}
-              >
-                <Ionicons name='add' size={20} color='#34C759' />
-                <Text style={styles.addScheduleText}>予定を追加</Text>
-              </TouchableOpacity>
-            )}
+            <UnitSchedule
+              mockSchedules={mockSchedules}
+              selectedDate={selectedDate}
+            />
+            <Button setModalVisible={setModalVisible} label='予定を追加' />
           </View>
         )}
       </ScrollView>
@@ -194,39 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#8E8E93',
     marginBottom: 16,
-  },
-  scheduleDetail: {
-    marginBottom: 16,
-  },
-  scheduleTime: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  timeText: {
-    fontSize: 16,
-    color: '#1C1C1E',
-    fontWeight: '500',
-  },
-  timeSeparator: {
-    fontSize: 16,
-    color: '#8E8E93',
-    marginHorizontal: 8,
-  },
-  schedulePurpose: {
-    fontSize: 14,
-    color: '#8E8E93',
-  },
-  addScheduleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  addScheduleText: {
-    fontSize: 16,
-    color: '#34C759',
-    marginLeft: 8,
-    fontWeight: '500',
   },
   bottomTabs: {
     flexDirection: 'row',
