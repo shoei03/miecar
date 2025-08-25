@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import CalendarContents from '@/components/ui/CalendarContents';
+import CalendarListContents from '@/components/ui/CalendarListContents';
 import ModalContents from '@/components/ui/ModalContents';
 import ToggleGroups from '@/components/ui/ToggleGroups';
 import { mockSchedules } from '@/mock/schedule';
@@ -24,10 +25,6 @@ export default function HomeScreen() {
 
   const formatMonthYear = (date: Date) => {
     return `${date.getFullYear()}年${date.getMonth() + 1}月`;
-  };
-
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
 
   const getSelectedSchedules = () => {
@@ -69,52 +66,10 @@ export default function HomeScreen() {
           <View style={styles.calendarDivider} />
         </>
       ) : (
-        <View style={styles.listContainer}>
-          {/* 日ごとにグループ化して表示 */}
-          {Array.from(
-            { length: getDaysInMonth(currentDate) },
-            (_, i) => i + 1
-          ).map(day => {
-            const schedules = mockSchedules.filter(s => s.date === day);
-            return (
-              <View key={day} style={styles.listDayRow}>
-                <View style={styles.listDayBox}>
-                  <Text style={styles.listDayText}>{day}</Text>
-                </View>
-                <View style={styles.listSchedulesBox}>
-                  {schedules.length === 0 ? (
-                    <Text style={styles.listNoSchedule}>予定なし</Text>
-                  ) : (
-                    schedules.map(schedule => (
-                      <View key={schedule.id} style={styles.listScheduleItem}>
-                        <Text
-                          style={[
-                            styles.listScheduleName,
-                            { color: schedule.color },
-                          ]}
-                        >
-                          {schedule.userName}
-                        </Text>
-                        <View style={styles.scheduleTime}>
-                          <Text style={styles.timeText}>
-                            {schedule.startTime}
-                          </Text>
-                          <Text style={styles.timeSeparator}>-</Text>
-                          <Text style={styles.timeText}>
-                            {schedule.endTime}
-                          </Text>
-                        </View>
-                        <Text style={styles.schedulePurpose}>
-                          {schedule.purpose}
-                        </Text>
-                      </View>
-                    ))
-                  )}
-                </View>
-              </View>
-            );
-          })}
-        </View>
+        <CalendarListContents
+          mockSchedules={mockSchedules}
+          currentDate={currentDate}
+        />
       )}
 
       {/* 選択された日の詳細（カレンダー表示時のみ） */}
@@ -290,57 +245,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#8E8E93',
     marginTop: 4,
-  },
-  listContainer: {
-    marginHorizontal: 20,
-    marginBottom: 24,
-  },
-  listDayRow: {
-    flexDirection: 'row',
-    alignItems: 'center', // 日付と予定なしの上下を揃える
-    marginBottom: 12,
-  },
-  listDayBox: {
-    minWidth: 36,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginRight: 12,
-    backgroundColor: 'transparent',
-    borderRadius: 0,
-  },
-  listDayText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#8E8E93',
-  },
-  listSchedulesBox: {
-    flex: 1,
-    gap: 8,
-    minHeight: 40,
-    justifyContent: 'center', // 予定なしを上下中央に
-  },
-  listNoSchedule: {
-    color: '#C7C7CC',
-    fontSize: 14,
-    fontStyle: 'italic',
-    textAlignVertical: 'center', // Android用
-    textAlign: 'left', // iOS用 左詰め
-  },
-  listScheduleItem: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
-    shadowOffset: { width: 2, height: 2 }, // 右下方向にシャドウ
-    elevation: 2,
-  },
-  listScheduleName: {
-    fontWeight: '600',
-    fontSize: 15,
-    marginBottom: 2,
   },
   modalAddButtonContainer: {
     backgroundColor: '#fff',
