@@ -1,10 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Animated,
   Modal,
-  PanResponder,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -12,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+import ModalContents from '@/components/ui/ModalContents';
 
 interface Schedule {
   id: string;
@@ -113,28 +112,6 @@ export default function HomeScreen() {
   const [selectedDate, setSelectedDate] = useState(today.getDate());
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar'); // 表示モード追加
   const [modalVisible, setModalVisible] = useState(false);
-  const router = useRouter();
-  const panY = useRef(new Animated.Value(0)).current;
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gestureState) =>
-        Math.abs(gestureState.dy) > 10,
-      onPanResponderMove: Animated.event([null, { dy: panY }], {
-        useNativeDriver: false,
-      }),
-      onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > 80) {
-          setModalVisible(false);
-          panY.setValue(0);
-        } else {
-          Animated.spring(panY, {
-            toValue: 0,
-            useNativeDriver: false,
-          }).start();
-        }
-      },
-    })
-  ).current;
 
   const formatMonthYear = (date: Date) => {
     return `${date.getFullYear()}年${date.getMonth() + 1}月`;
@@ -364,37 +341,7 @@ export default function HomeScreen() {
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={{ flex: 1, justifyContent: 'flex-end', zIndex: 100 }}>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            activeOpacity={1}
-            onPress={() => setModalVisible(false)}
-          >
-            <View style={{ flex: 1 }} />
-          </TouchableOpacity>
-          <Animated.View
-            style={[
-              styles.modalContent,
-              { transform: [{ translateY: panY }], zIndex: 101 },
-            ]}
-            {...panResponder.panHandlers}
-          >
-            <Text
-              style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}
-            >
-              予定を追加
-            </Text>
-            {/* ここにフォームや入力UIを追加可能 */}
-            <TouchableOpacity
-              style={styles.modalAddButton}
-              onPress={() => {
-                router.push('/add-schedule');
-              }}
-            >
-              <Text style={styles.modalAddButtonText}>新規追加</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
+        <ModalContents setModalVisible={setModalVisible} />
       </Modal>
     </SafeAreaView>
   );
@@ -631,17 +578,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 2,
   },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    padding: 24,
-    minHeight: 220,
-    shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    elevation: 8,
-  },
   modalAddButtonContainer: {
     backgroundColor: '#fff',
     paddingVertical: 16,
@@ -649,17 +585,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
     marginBottom: 56, // タブ分の余白を追加
-  },
-  modalAddButton: {
-    backgroundColor: '#34C759',
-    borderRadius: 24,
-    paddingHorizontal: 32,
-    paddingVertical: 12,
-  },
-  modalAddButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   calendarDivider: {
     height: 1,
