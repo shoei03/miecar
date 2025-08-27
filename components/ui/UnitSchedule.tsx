@@ -1,35 +1,42 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
 export default function UnitSchedule({
   mockSchedules,
-  selectedDate,
 }: {
   mockSchedules: ScheduleType[];
-  selectedDate: number;
 }) {
-  const getSelectedSchedules = () => {
-    return mockSchedules.filter(schedule => schedule.date === selectedDate);
-  };
+  const { currentYear, currentMonth, currentDate } = useDayStore();
+
+  // 選択したセルの日付に対応するスケジュールを抽出
+  const selectedSchedules = useMemo(() => {
+    return mockSchedules.filter(schedule => schedule.date === currentDate);
+  }, [currentDate, mockSchedules]);
+
+  // スケジュールがない場合は何も表示しない
+  if (selectedSchedules.length === 0) {
+    return null;
+  }
 
   return (
-    <>
-      {getSelectedSchedules().length > 0 && (
-        <View>
-          {getSelectedSchedules().map(schedule => (
-            <View key={schedule.id} style={styles.scheduleDetail}>
-              <View style={styles.scheduleTime}>
-                <Text style={styles.timeText}>{schedule.startTime}</Text>
-                <Text style={styles.timeSeparator}>-</Text>
-                <Text style={styles.timeText}>{schedule.endTime}</Text>
-              </View>
-              <Text style={styles.schedulePurpose}>{schedule.purpose}</Text>
-            </View>
-          ))}
+    <View style={styles.selectedDateSection}>
+      <Text style={styles.selectedDateText}>
+        {currentYear}年{currentMonth + 1}月{currentDate}日 (火)
+      </Text>
+      {selectedSchedules.map(schedule => (
+        <View key={schedule.id} style={styles.scheduleDetail}>
+          <View style={styles.scheduleTime}>
+            <Text style={styles.timeText}>{schedule.startTime}</Text>
+            <Text style={styles.timeSeparator}>-</Text>
+            <Text style={styles.timeText}>{schedule.endTime}</Text>
+          </View>
+          <Text style={styles.schedulePurpose}>{schedule.purpose}</Text>
         </View>
-      )}
-    </>
+      ))}
+    </View>
   );
 }
 
@@ -55,5 +62,14 @@ const styles = StyleSheet.create({
   schedulePurpose: {
     fontSize: 14,
     color: '#8E8E93',
+  },
+  selectedDateSection: {
+    marginHorizontal: 20,
+    marginBottom: 24,
+  },
+  selectedDateText: {
+    fontSize: 16,
+    color: '#8E8E93',
+    marginBottom: 16,
   },
 });

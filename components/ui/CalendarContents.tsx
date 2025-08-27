@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useCallback, memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
+// 日付計算関数
 const getDaysInMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 };
@@ -11,38 +13,29 @@ const getFirstDayOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 };
 
-export default function CalendarContents({
-  mockSchedules,
-}: {
-  mockSchedules: ScheduleType[];
-}) {
-  const [currentDate] = useState(new Date()); // 現在日付
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today.getDate());
-  const daysInMonth = getDaysInMonth(currentDate);
-  const firstDay = getFirstDayOfMonth(currentDate);
-  const days = [];
-
-  // 週の最初の空白セル
-  for (let i = 0; i < firstDay; i++) {
-    days.push(<View key={`empty-${i}`} style={styles.emptyDay} />);
-  }
-
-  // 日付セル
-  for (let day = 1; day <= daysInMonth; day++) {
-    const hasSchedule = mockSchedules.some(schedule => schedule.date === day);
-    const isSelected = selectedDate === day;
-    const isToday = day === 8; // サンプルでは8日が今日
-
-    days.push(
+// 日付セルコンポーネント
+const DayCell = memo(
+  ({
+    day,
+    isSelected,
+    isToday,
+    hasSchedule,
+    onPress,
+  }: {
+    day: number;
+    isSelected: boolean;
+    isToday: boolean;
+    hasSchedule: boolean;
+    onPress: (day: number) => void;
+  }) => {
+    return (
       <TouchableOpacity
-        key={day}
         style={[
           styles.dayCell,
           isSelected && styles.selectedDay,
           isToday && styles.todayCell,
         ]}
-        onPress={() => setSelectedDate(day)}
+        onPress={() => onPress(day)}
       >
         <Text
           style={[
@@ -57,18 +50,94 @@ export default function CalendarContents({
       </TouchableOpacity>
     );
   }
+);
+DayCell.displayName = 'DayCell';
 
-  return days;
+export default function CalendarContents({
+  mockSchedules,
+}: {
+  mockSchedules: ScheduleType[];
+}) {
+  // TODO: todayはどうにかして処理
+  const { today, currentDate, initialDate, setCurrentDate } = useDayStore();
+
+  // 日付計算
+  const daysInMonth = useMemo(() => getDaysInMonth(today), [today]);
+  const firstDay = useMemo(() => getFirstDayOfMonth(today), [today]);
+
+  // スケジュールがある日をセットで管理
+  const scheduleDays = useMemo(() => {
+    return new Set(mockSchedules.map(schedule => schedule.date));
+  }, [mockSchedules]);
+
+  // セルがクリックされた時の処理
+  const handleDateSelect = useCallback(
+    (day: number) => {
+      setCurrentDate(day);
+    },
+    [setCurrentDate]
+  );
+
+  return (
+    <>
+      <View style={styles.weekDays}>
+        {['日', '月', '火', '水', '木', '金', '土'].map(day => (
+          <Text key={day} style={styles.weekDayText}>
+            {day}
+          </Text>
+        ))}
+      </View>
+      <View style={styles.daysContainer}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {/* 空のセル */}
+          {Array.from({ length: firstDay }).map((_, i) => (
+            <View key={`empty-day-${i + 1}`} style={styles.emptyDay} />
+          ))}
+          {/* 日付セル */}
+          {Array.from({ length: daysInMonth }).map((_, i) => {
+            const day = i + 1;
+            return (
+              <DayCell
+                key={`day-${day}`}
+                day={day}
+                isSelected={currentDate === day}
+                isToday={initialDate === day}
+                hasSchedule={scheduleDays.has(day)}
+                onPress={handleDateSelect}
+              />
+            );
+          })}
+        </View>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
+  weekDays: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F2F7',
+  },
+  weekDayText: {
+    fontSize: 14,
+    color: '#8E8E93',
+    fontWeight: '500',
+  },
+  daysContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingTop: 8,
+  },
   dayCell: {
     width: '14.285%', // 7分の1
-    aspectRatio: 1.2, // セルを少し縦長に
+    aspectRatio: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    paddingBottom: 16, // 下の余白を増やす
+    paddingBottom: 16,
   },
   dayText: {
     fontSize: 16,
@@ -76,7 +145,7 @@ const styles = StyleSheet.create({
   },
   selectedDay: {
     backgroundColor: '#daf5e0ff',
-    borderRadius: 10, // セルが大きくなった分調整
+    borderRadius: 10,
   },
   selectedDayText: {
     color: 'black',
@@ -87,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
   },
   todayText: {
-    fontWeight: '600',
+    fontWeight: '800',
   },
   scheduleIndicator: {
     position: 'absolute',

@@ -1,60 +1,62 @@
+import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
+
+// 日付計算関数
+const getDaysInMonth = (date: Date) => {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+};
 
 export default function CalendarListContents({
   mockSchedules,
-  currentDate,
 }: {
   mockSchedules: ScheduleType[];
-  currentDate: Date;
 }) {
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
+  // TODO: todayをどうにか処理する
+  const { today } = useDayStore();
+  const daysInMonth = useMemo(() => getDaysInMonth(today), [today]);
+
   return (
     <View style={styles.listContainer}>
       {/* 日ごとにグループ化して表示 */}
-      {Array.from({ length: getDaysInMonth(currentDate) }, (_, i) => i + 1).map(
-        day => {
-          const schedules = mockSchedules.filter(s => s.date === day);
-          return (
-            <View key={day} style={styles.listDayRow}>
-              <View style={styles.listDayBox}>
-                <Text style={styles.listDayText}>{day}</Text>
-              </View>
-              <View style={styles.listSchedulesBox}>
-                {schedules.length === 0 ? (
-                  <Text style={styles.listNoSchedule}>予定なし</Text>
-                ) : (
-                  schedules.map(schedule => (
-                    <View key={schedule.id} style={styles.listScheduleItem}>
-                      <Text
-                        style={[
-                          styles.listScheduleName,
-                          { color: schedule.color },
-                        ]}
-                      >
-                        {schedule.userName}
-                      </Text>
-                      <View style={styles.scheduleTime}>
-                        <Text style={styles.timeText}>
-                          {schedule.startTime}
-                        </Text>
-                        <Text style={styles.timeSeparator}>-</Text>
-                        <Text style={styles.timeText}>{schedule.endTime}</Text>
-                      </View>
-                      <Text style={styles.schedulePurpose}>
-                        {schedule.purpose}
-                      </Text>
-                    </View>
-                  ))
-                )}
-              </View>
+      {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+        const schedules = mockSchedules.filter(s => s.date === day);
+        return (
+          <View key={day} style={styles.listDayRow}>
+            <View style={styles.listDayBox}>
+              <Text style={styles.listDayText}>{day}</Text>
             </View>
-          );
-        }
-      )}
+            <View style={styles.listSchedulesBox}>
+              {schedules.length === 0 ? (
+                <Text style={styles.listNoSchedule}>予定なし</Text>
+              ) : (
+                schedules.map(schedule => (
+                  <View key={schedule.id} style={styles.listScheduleItem}>
+                    <Text
+                      style={[
+                        styles.listScheduleName,
+                        { color: schedule.color },
+                      ]}
+                    >
+                      {schedule.userName}
+                    </Text>
+                    <View style={styles.scheduleTime}>
+                      <Text style={styles.timeText}>{schedule.startTime}</Text>
+                      <Text style={styles.timeSeparator}>-</Text>
+                      <Text style={styles.timeText}>{schedule.endTime}</Text>
+                    </View>
+                    <Text style={styles.schedulePurpose}>
+                      {schedule.purpose}
+                    </Text>
+                  </View>
+                ))
+              )}
+            </View>
+          </View>
+        );
+      })}
     </View>
   );
 }
