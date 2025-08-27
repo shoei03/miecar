@@ -10,7 +10,7 @@ export default function CalendarHeader({
   viewMode: 'calendar' | 'list';
   setViewMode: (mode: 'calendar' | 'list') => void;
 }) {
-  const { currentYear, currentMonth } = useDayStore(state => state);
+  const { currentYear, currentMonth } = useDayStore();
 
   return (
     <View style={styles.header}>
