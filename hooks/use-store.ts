@@ -12,6 +12,7 @@ interface DayStoreState {
   initialDate: number;
   viewMode: 'calendar' | 'list';
   mockSchedules: ScheduleType[];
+  isModalVisible: boolean;
   setCurrentYear: (year: number) => void;
   setCurrentMonth: (month: number) => void;
   setCurrentDate: (date: number) => void;
@@ -19,6 +20,7 @@ interface DayStoreState {
   setFirstDayOfMonth: (currentYear: number, currentMonth: number) => void;
   setViewMode: (viewMode: 'calendar' | 'list') => void;
   setMockSchedules: (schedules: ScheduleType[]) => void;
+  setModalVisible: (visible: boolean) => void;
 }
 
 export const useDayStore = create<DayStoreState>(set => ({
@@ -31,6 +33,7 @@ export const useDayStore = create<DayStoreState>(set => ({
   initialDate: new Date().getDate(),
   viewMode: 'calendar',
   mockSchedules: [],
+  isModalVisible: false,
   setCurrentYear: (year: number) => set({ currentYear: year }),
   setCurrentMonth: (month: number) => set({ currentMonth: month }),
   setCurrentDate: (date: number) => set({ currentDate: date }),
@@ -45,4 +48,5 @@ export const useDayStore = create<DayStoreState>(set => ({
   setViewMode: (viewMode: 'calendar' | 'list') => set({ viewMode }),
   setMockSchedules: (schedules: ScheduleType[]) =>
     set({ mockSchedules: schedules }),
+  setModalVisible: (visible: boolean) => set({ isModalVisible: visible }),
 }));

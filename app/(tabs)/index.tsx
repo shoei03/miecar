@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Modal, SafeAreaView, StyleSheet } from 'react-native';
 
 import CalendarHeader from '@/components/CalendarHeader';
@@ -9,8 +9,13 @@ import { useDayStore } from '@/hooks/use-store';
 import { mockSchedules, type ScheduleType } from '@/mock/schedule'; // モックデータのインポート
 
 export default function HomeScreen() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const { currentMonth, currentYear, setMockSchedules } = useDayStore();
+  const {
+    currentMonth,
+    currentYear,
+    isModalVisible,
+    setMockSchedules,
+    setModalVisible,
+  } = useDayStore();
 
   const filteredSchedules: ScheduleType[] = useMemo(
     () =>
@@ -42,12 +47,12 @@ export default function HomeScreen() {
 
       {/* 予定追加モーダル */}
       <Modal
-        visible={modalVisible}
+        visible={isModalVisible}
         animationType='slide'
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <ModalContents setModalVisible={setModalVisible} />
+        <ModalContents />
       </Modal>
     </SafeAreaView>
   );

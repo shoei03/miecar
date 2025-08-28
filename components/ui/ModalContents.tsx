@@ -3,12 +3,11 @@ import { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ModalContents({
-  setModalVisible,
-}: {
-  setModalVisible: (visible: boolean) => void;
-}) {
+import { useDayStore } from '@/hooks/use-store';
+
+export default function ModalContents() {
   const router = useRouter();
+  const { setModalVisible } = useDayStore();
 
   const handleRouter = useCallback(() => {
     router.push('/add-schedule');
