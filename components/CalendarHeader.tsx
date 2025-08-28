@@ -1,22 +1,39 @@
-import { memo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { memo, useCallback } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import ToggleGroups from '@/components/ui/ToggleGroups';
 import { useDayStore } from '@/hooks/use-store';
 
 const CalendarHeader = memo(function CalendarHeader() {
-  const { currentYear, currentMonth } = useDayStore();
+  const { currentYear, currentMonth, setCurrentYear, setCurrentMonth } =
+    useDayStore();
+
+  const handleChangeMonth = useCallback(
+    (direction: -1 | 1) => {
+      const newDate = new Date(currentYear, currentMonth + direction, 1);
+      setCurrentYear(newDate.getFullYear());
+      setCurrentMonth(newDate.getMonth());
+    },
+    [currentMonth, currentYear, setCurrentMonth, setCurrentYear]
+  );
 
   return (
     <View style={styles.header}>
       <View style={styles.headerLeft}>
         <ToggleGroups />
       </View>
+      <TouchableOpacity onPress={() => handleChangeMonth(-1)}>
+        <Ionicons name='arrow-back' size={20} color='#1C1C1E' />
+      </TouchableOpacity>
       <View style={styles.headerCenter}>
         <Text style={styles.headerMonthText}>
           {currentYear}年{currentMonth + 1}月
         </Text>
       </View>
+      <TouchableOpacity onPress={() => handleChangeMonth(1)}>
+        <Ionicons name='arrow-forward' size={20} color='#1C1C1E' />
+      </TouchableOpacity>
       <View style={styles.headerRight}>
         {/* TODO:家族カレンダーの切り替えボタンを設置 */}
       </View>
