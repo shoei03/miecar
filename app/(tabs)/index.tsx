@@ -34,7 +34,11 @@ export default function HomeScreen() {
       <CalendarView />
 
       {/* 予定を追加するボタン */}
-      <Button setModalVisible={setModalVisible} label='予定を追加' />
+      <Button
+        outerStyles={styles.addButton}
+        setModalVisible={setModalVisible}
+        label='予定を追加'
+      />
 
       {/* 予定追加モーダル */}
       <Modal
@@ -54,5 +58,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
   },
 });

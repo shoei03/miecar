@@ -4,14 +4,16 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 export default function Button({
   setModalVisible,
   label,
+  outerStyles,
 }: {
   setModalVisible: (visible: boolean) => void;
   iconName?: string;
   label?: string;
+  outerStyles?: object;
 }) {
   return (
     <TouchableOpacity
-      style={styles.addScheduleButton}
+      style={[styles.addScheduleButton, outerStyles]}
       onPress={() => setModalVisible(true)}
     >
       <Ionicons name='add' size={20} color='#34C759' />
