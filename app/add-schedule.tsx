@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,8 +10,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { useDayStore } from '@/hooks/use-store';
 
@@ -21,22 +22,26 @@ const colorOptions = [
   '#FFCC00',
   '#34C759',
   '#5856D6',
-  '#AF52DE',
-  '#FF2D92',
-  '#5AC8FA',
-  '#32D74B',
-  '#FF6B35',
-  '#8E8E93',
 ];
 
 export default function AddScheduleScreen() {
-  const { currentDate, currentMonth, currentYear, setModalVisible } =
-    useDayStore();
+  const {
+    currentDate,
+    currentMonth,
+    currentYear,
+    setModalVisible,
+    setCurrentDate,
+    setCurrentMonth,
+    setCurrentYear,
+  } = useDayStore();
+
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   const [formData, setFormData] = useState({
     purpose: '',
-    startTime: '',
-    endTime: '',
+    startTime: startTime.toString(),
+    endTime: endTime.toString(),
     day: currentDate.toString(),
     month: currentMonth.toString(),
     year: currentYear.toString(),
@@ -96,11 +101,41 @@ export default function AddScheduleScreen() {
     }
   };
 
+  const [pickerVisibility, setPickerVisibility] = useState({
+    date: false,
+    startTime: false,
+    endTime: false,
+  });
+
+  const showPicker = (type: 'date' | 'startTime' | 'endTime') => {
+    setPickerVisibility(prev => ({ ...prev, [type]: true }));
+  };
+
+  const hidePicker = (type: 'date' | 'startTime' | 'endTime') => {
+    setPickerVisibility(prev => ({ ...prev, [type]: false }));
+  };
+
+  const handlePickerConfirm = (
+    type: 'date' | 'startTime' | 'endTime',
+    date: Date
+  ) => {
+    if (type === 'date') {
+      setCurrentDate(date.getDate());
+      setCurrentMonth(date.getMonth() + 1);
+      setCurrentYear(date.getFullYear());
+    } else if (type === 'startTime') {
+      setStartTime(date);
+    } else if (type === 'endTime') {
+      setEndTime(date);
+    }
+    hidePicker(type);
+  };
+
   const renderColorPicker = () => (
     <View style={styles.colorContainer}>
-      {colorOptions.map((color, index) => (
+      {colorOptions.map(color => (
         <TouchableOpacity
-          key={index}
+          key={color} // Use color as a unique key instead of index
           style={[
             styles.colorOption,
             { backgroundColor: color },
@@ -136,6 +171,7 @@ export default function AddScheduleScreen() {
         </View>
 
         {/* 使用目的 */}
+        {/* TODO: 選択形式にする */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>
             使用目的 <Text style={styles.required}>*</Text>
@@ -150,34 +186,55 @@ export default function AddScheduleScreen() {
           />
         </View>
 
-        {/* 時刻入力 */}
+        {/* 開始時刻入力 */}
+        <DateTimePickerModal
+          isVisible={pickerVisibility.startTime}
+          mode='time'
+          onConfirm={date => handlePickerConfirm('startTime', date)}
+          onCancel={() => hidePicker('startTime')}
+        />
         <View style={styles.formGroup}>
           <Text style={styles.label}>
             開始時刻 <Text style={styles.required}>*</Text>
           </Text>
           <TextInput
             style={styles.textInput}
-            placeholder='09:00'
-            value={formData.startTime}
-            onChangeText={value => handleInputChange('startTime', value)}
-            keyboardType='numeric'
+            value={startTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+            onPress={() => showPicker('startTime')}
           />
         </View>
 
+        {/* 終了時刻入力 */}
+        <DateTimePickerModal
+          isVisible={pickerVisibility.endTime}
+          mode='time'
+          onConfirm={date => handlePickerConfirm('endTime', date)}
+          onCancel={() => hidePicker('endTime')}
+        />
         <View style={styles.formGroup}>
           <Text style={styles.label}>
             終了時刻 <Text style={styles.required}>*</Text>
           </Text>
           <TextInput
             style={styles.textInput}
-            placeholder='18:00'
-            value={formData.endTime}
-            onChangeText={value => handleInputChange('endTime', value)}
-            keyboardType='numeric'
+            value={endTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+            onPress={() => showPicker('endTime')}
           />
         </View>
 
         {/* 日付入力 */}
+        <DateTimePickerModal
+          isVisible={pickerVisibility.date}
+          mode='date'
+          onConfirm={date => handlePickerConfirm('date', date)}
+          onCancel={() => hidePicker('date')}
+        />
         <View style={styles.formGroup}>
           <Text style={styles.label}>
             日付 <Text style={styles.required}>*</Text>
@@ -187,39 +244,31 @@ export default function AddScheduleScreen() {
               <Text style={styles.dateLabel}>年</Text>
               <TextInput
                 style={styles.dateInput}
-                placeholder='2024'
-                value={formData.year}
-                onChangeText={value => handleInputChange('year', value)}
-                keyboardType='numeric'
-                maxLength={4}
+                value={currentYear.toString()}
+                onPress={() => showPicker('date')}
               />
             </View>
             <View style={styles.dateInputWrapper}>
               <Text style={styles.dateLabel}>月</Text>
               <TextInput
                 style={styles.dateInput}
-                placeholder='12'
-                value={formData.month}
-                onChangeText={value => handleInputChange('month', value)}
-                keyboardType='numeric'
-                maxLength={2}
+                value={currentMonth.toString()}
+                onPress={() => showPicker('date')}
               />
             </View>
             <View style={styles.dateInputWrapper}>
               <Text style={styles.dateLabel}>日</Text>
               <TextInput
                 style={styles.dateInput}
-                placeholder='25'
-                value={formData.day}
-                onChangeText={value => handleInputChange('day', value)}
-                keyboardType='numeric'
-                maxLength={2}
+                value={currentDate.toString()}
+                onPress={() => showPicker('date')}
               />
             </View>
           </View>
         </View>
 
         {/* 使用者名 */}
+        {/* TODO: 選択形式にする */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>
             使用者 <Text style={styles.required}>*</Text>
