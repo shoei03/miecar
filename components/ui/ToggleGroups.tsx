@@ -1,18 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useCallback, memo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-export default function ToggleGroups({
-  viewMode,
-  setViewMode,
-}: {
-  viewMode: 'calendar' | 'list';
-  setViewMode: (mode: 'calendar' | 'list') => void;
-}) {
+import { useDayStore } from '@/hooks/use-store';
+
+const ToggleGroups = memo(function ToggleGroups() {
+  const { viewMode, setViewMode } = useDayStore();
+
+  const handleViewMode = useCallback(() => {
+    setViewMode(viewMode === 'calendar' ? 'list' : 'calendar');
+  }, [viewMode, setViewMode]);
+
   return (
-    <TouchableOpacity
-      onPress={() => setViewMode(viewMode === 'calendar' ? 'list' : 'calendar')}
-      style={styles.toggleGroup}
-    >
+    <TouchableOpacity onPress={handleViewMode} style={styles.toggleGroup}>
       <View
         style={[
           styles.toggleIconButton,
@@ -39,7 +39,9 @@ export default function ToggleGroups({
       </View>
     </TouchableOpacity>
   );
-}
+});
+
+export default ToggleGroups;
 
 const styles = StyleSheet.create({
   toggleGroup: {

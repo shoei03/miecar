@@ -1,4 +1,4 @@
-import { useMemo, useCallback, memo } from 'react';
+import { useEffect, useMemo, useCallback, memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
@@ -62,7 +62,7 @@ export default function CalendarContents({
   } = useDayStore();
 
   // 日付計算
-  useMemo(() => {
+  useEffect(() => {
     setDaysInMonth(currentYear, currentMonth);
     setFirstDayOfMonth(currentYear, currentMonth);
   }, [setDaysInMonth, setFirstDayOfMonth, currentYear, currentMonth]);

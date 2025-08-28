@@ -1,21 +1,16 @@
+import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import ToggleGroups from '@/components/ui/ToggleGroups';
 import { useDayStore } from '@/hooks/use-store';
 
-export default function CalendarHeader({
-  viewMode,
-  setViewMode,
-}: {
-  viewMode: 'calendar' | 'list';
-  setViewMode: (mode: 'calendar' | 'list') => void;
-}) {
+const CalendarHeader = memo(function CalendarHeader() {
   const { currentYear, currentMonth } = useDayStore();
 
   return (
     <View style={styles.header}>
       <View style={styles.headerLeft}>
-        <ToggleGroups viewMode={viewMode} setViewMode={setViewMode} />
+        <ToggleGroups />
       </View>
       <View style={styles.headerCenter}>
         <Text style={styles.headerMonthText}>
@@ -27,7 +22,9 @@ export default function CalendarHeader({
       </View>
     </View>
   );
-}
+});
+
+export default CalendarHeader;
 
 const styles = StyleSheet.create({
   header: {

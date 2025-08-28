@@ -8,11 +8,13 @@ interface DayStoreState {
   daysInMonth: number;
   firstDayOfMonth: number;
   initialDate: number;
+  viewMode: 'calendar' | 'list';
   setCurrentYear: (year: number) => void;
   setCurrentMonth: (month: number) => void;
   setCurrentDate: (date: number) => void;
   setDaysInMonth: (currentYear: number, currentMonth: number) => void;
   setFirstDayOfMonth: (currentYear: number, currentMonth: number) => void;
+  setViewMode: (viewMode: 'calendar' | 'list') => void;
 }
 
 export const useDayStore = create<DayStoreState>(set => ({
@@ -23,6 +25,7 @@ export const useDayStore = create<DayStoreState>(set => ({
   daysInMonth: new Date().getDate(),
   firstDayOfMonth: new Date().getDay(),
   initialDate: new Date().getDate(),
+  viewMode: 'calendar',
   setCurrentYear: (year: number) => set({ currentYear: year }),
   setCurrentMonth: (month: number) => set({ currentMonth: month }),
   setCurrentDate: (date: number) => set({ currentDate: date }),
@@ -34,4 +37,5 @@ export const useDayStore = create<DayStoreState>(set => ({
     set(() => ({
       firstDayOfMonth: new Date(currentYear, currentMonth, 1).getDay(),
     })),
+  setViewMode: (viewMode: 'calendar' | 'list') => set({ viewMode }),
 }));

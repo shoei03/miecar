@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
@@ -12,7 +12,7 @@ export default function CalendarListContents({
   const { daysInMonth, currentYear, currentMonth, setDaysInMonth } =
     useDayStore();
 
-  useMemo(() => {
+  useEffect(() => {
     setDaysInMonth(currentYear, currentMonth);
   }, [setDaysInMonth, currentYear, currentMonth]);
 

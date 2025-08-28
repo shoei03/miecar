@@ -1,17 +1,18 @@
+import { memo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import UnitSchedule from '@/components/ui/UnitSchedule';
+import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
-export default function CalendarView({
-  viewMode,
+const CalendarView = memo(function CalendarView({
   mockSchedules,
 }: {
-  viewMode: 'calendar' | 'list';
   mockSchedules: ScheduleType[];
 }) {
+  const { viewMode } = useDayStore();
   return (
     <>
       {viewMode === 'calendar' ? (
@@ -39,7 +40,9 @@ export default function CalendarView({
       )}
     </>
   );
-}
+});
+
+export default CalendarView;
 
 const styles = StyleSheet.create({
   calendar: {
