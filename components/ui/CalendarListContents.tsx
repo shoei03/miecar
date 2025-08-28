@@ -4,24 +4,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
-// 日付計算関数
-const getDaysInMonth = (date: Date) => {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-};
-
 export default function CalendarListContents({
   mockSchedules,
 }: {
   mockSchedules: ScheduleType[];
 }) {
-  // TODO: todayをどうにか処理する
-  const { today } = useDayStore();
-  const daysInMonth = useMemo(() => getDaysInMonth(today), [today]);
+  const { daysInMonth, currentYear, currentMonth, setDaysInMonth } =
+    useDayStore();
+
+  useMemo(() => {
+    setDaysInMonth(currentYear, currentMonth);
+  }, [setDaysInMonth, currentYear, currentMonth]);
 
   return (
     <View style={styles.listContainer}>
       {/* 日ごとにグループ化して表示 */}
       {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(day => {
+        // TODO: mockScheduleが変更された時だけ実行するようにする
         const schedules = mockSchedules.filter(s => s.date === day);
         return (
           <View key={day} style={styles.listDayRow}>

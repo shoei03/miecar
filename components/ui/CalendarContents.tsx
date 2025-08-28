@@ -4,15 +4,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDayStore } from '@/hooks/use-store';
 import type { ScheduleType } from '@/mock/schedule';
 
-// 日付計算関数
-const getDaysInMonth = (date: Date) => {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-};
-
-const getFirstDayOfMonth = (date: Date) => {
-  return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-};
-
 // 日付セルコンポーネント
 const DayCell = memo(
   ({
@@ -58,12 +49,23 @@ export default function CalendarContents({
 }: {
   mockSchedules: ScheduleType[];
 }) {
-  // TODO: todayはどうにかして処理
-  const { today, currentDate, initialDate, setCurrentDate } = useDayStore();
+  const {
+    currentDate,
+    currentYear,
+    currentMonth,
+    initialDate,
+    daysInMonth,
+    firstDayOfMonth,
+    setCurrentDate,
+    setDaysInMonth,
+    setFirstDayOfMonth,
+  } = useDayStore();
 
   // 日付計算
-  const daysInMonth = useMemo(() => getDaysInMonth(today), [today]);
-  const firstDay = useMemo(() => getFirstDayOfMonth(today), [today]);
+  useMemo(() => {
+    setDaysInMonth(currentYear, currentMonth);
+    setFirstDayOfMonth(currentYear, currentMonth);
+  }, [setDaysInMonth, setFirstDayOfMonth, currentYear, currentMonth]);
 
   // スケジュールがある日をセットで管理
   const scheduleDays = useMemo(() => {
@@ -90,7 +92,7 @@ export default function CalendarContents({
       <View style={styles.daysContainer}>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {/* 空のセル */}
-          {Array.from({ length: firstDay }).map((_, i) => (
+          {Array.from({ length: firstDayOfMonth }).map((_, i) => (
             <View key={`empty-day-${i + 1}`} style={styles.emptyDay} />
           ))}
           {/* 日付セル */}
