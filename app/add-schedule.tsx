@@ -219,14 +219,14 @@ export default function AddScheduleScreen() {
           </View>
         </View>
 
-        {/* ユーザー名 */}
+        {/* 使用者名 */}
         <View style={styles.formGroup}>
           <Text style={styles.label}>
-            ユーザー名 <Text style={styles.required}>*</Text>
+            使用者 <Text style={styles.required}>*</Text>
           </Text>
           <TextInput
             style={styles.textInput}
-            placeholder='ユーザー名を入力'
+            placeholder='使用者名を入力'
             value={formData.userName}
             onChangeText={value => handleInputChange('userName', value)}
           />
