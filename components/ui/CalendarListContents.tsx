@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
-import type { ScheduleType } from '@/mock/schedule';
 
-export default function CalendarListContents({
-  mockSchedules,
-}: {
-  mockSchedules: ScheduleType[];
-}) {
-  const { daysInMonth, currentYear, currentMonth, setDaysInMonth } =
-    useDayStore();
+export default function CalendarListContents() {
+  const {
+    daysInMonth,
+    currentYear,
+    currentMonth,
+    setDaysInMonth,
+    mockSchedules,
+  } = useDayStore();
 
   useEffect(() => {
     setDaysInMonth(currentYear, currentMonth);

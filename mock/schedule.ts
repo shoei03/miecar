@@ -7,6 +7,8 @@ export interface ScheduleType {
   purpose: string;
   color: string;
   date: number;
+  month: number;
+  year: number;
 }
 
 export const mockSchedules: ScheduleType[] = [
@@ -19,6 +21,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: 'ソフトボードカフェ',
     color: '#34C759',
     date: 8,
+    month: 8,
+    year: 2025,
   },
   {
     id: '2',
@@ -29,6 +33,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: '買い物',
     color: '#FF9500',
     date: 5,
+    month: 8,
+    year: 2025,
   },
   {
     id: '3',
@@ -39,6 +45,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: 'サッカー',
     color: '#007AFF',
     date: 12,
+    month: 7,
+    year: 2025,
   },
   {
     id: '4',
@@ -49,6 +57,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: 'ピアノ教室',
     color: '#AF52DE',
     date: 8,
+    month: 9,
+    year: 2025,
   },
   {
     id: '5',
@@ -59,6 +69,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: '会議',
     color: '#34C759',
     date: 20,
+    month: 6,
+    year: 2025,
   },
   {
     id: '6',
@@ -69,6 +81,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: '友達とランチ',
     color: '#FF9500',
     date: 15,
+    month: 6,
+    year: 2025,
   },
   {
     id: '7',
@@ -79,6 +93,8 @@ export const mockSchedules: ScheduleType[] = [
     purpose: '塾',
     color: '#007AFF',
     date: 22,
+    month: 6,
+    year: 2025,
   },
   {
     id: '8',
@@ -89,5 +105,7 @@ export const mockSchedules: ScheduleType[] = [
     purpose: '図書館',
     color: '#AF52DE',
     date: 25,
+    month: 6,
+    year: 2025,
   },
 ];

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useCallback, memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
-import type { ScheduleType } from '@/mock/schedule';
 
 // 日付セルコンポーネント
 const DayCell = memo(
@@ -44,11 +43,7 @@ const DayCell = memo(
 );
 DayCell.displayName = 'DayCell';
 
-export default function CalendarContents({
-  mockSchedules,
-}: {
-  mockSchedules: ScheduleType[];
-}) {
+export default function CalendarContents() {
   const {
     currentDate,
     currentYear,
@@ -56,6 +51,7 @@ export default function CalendarContents({
     initialDate,
     daysInMonth,
     firstDayOfMonth,
+    mockSchedules,
     setCurrentDate,
     setDaysInMonth,
     setFirstDayOfMonth,

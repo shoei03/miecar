@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import type { ScheduleType } from '@/mock/schedule';
+
 interface DayStoreState {
   today: Date;
   currentYear: number;
@@ -9,12 +11,14 @@ interface DayStoreState {
   firstDayOfMonth: number;
   initialDate: number;
   viewMode: 'calendar' | 'list';
+  mockSchedules: ScheduleType[];
   setCurrentYear: (year: number) => void;
   setCurrentMonth: (month: number) => void;
   setCurrentDate: (date: number) => void;
   setDaysInMonth: (currentYear: number, currentMonth: number) => void;
   setFirstDayOfMonth: (currentYear: number, currentMonth: number) => void;
   setViewMode: (viewMode: 'calendar' | 'list') => void;
+  setMockSchedules: (schedules: ScheduleType[]) => void;
 }
 
 export const useDayStore = create<DayStoreState>(set => ({
@@ -26,6 +30,7 @@ export const useDayStore = create<DayStoreState>(set => ({
   firstDayOfMonth: new Date().getDay(),
   initialDate: new Date().getDate(),
   viewMode: 'calendar',
+  mockSchedules: [],
   setCurrentYear: (year: number) => set({ currentYear: year }),
   setCurrentMonth: (month: number) => set({ currentMonth: month }),
   setCurrentDate: (date: number) => set({ currentDate: date }),
@@ -38,4 +43,6 @@ export const useDayStore = create<DayStoreState>(set => ({
       firstDayOfMonth: new Date(currentYear, currentMonth, 1).getDay(),
     })),
   setViewMode: (viewMode: 'calendar' | 'list') => set({ viewMode }),
+  setMockSchedules: (schedules: ScheduleType[]) =>
+    set({ mockSchedules: schedules }),
 }));

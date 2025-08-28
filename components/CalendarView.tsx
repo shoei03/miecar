@@ -5,13 +5,8 @@ import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import UnitSchedule from '@/components/ui/UnitSchedule';
 import { useDayStore } from '@/hooks/use-store';
-import type { ScheduleType } from '@/mock/schedule';
 
-const CalendarView = memo(function CalendarView({
-  mockSchedules,
-}: {
-  mockSchedules: ScheduleType[];
-}) {
+const CalendarView = memo(function CalendarView() {
   const { viewMode } = useDayStore();
   return (
     <>
@@ -19,7 +14,7 @@ const CalendarView = memo(function CalendarView({
         <>
           {/* カレンダー */}
           <View style={styles.calendar}>
-            <CalendarContents mockSchedules={mockSchedules} />
+            <CalendarContents />
           </View>
 
           {/* カレンダーの区切り線 */}
@@ -30,12 +25,12 @@ const CalendarView = memo(function CalendarView({
             style={styles.content}
             showsVerticalScrollIndicator={false}
           >
-            <UnitSchedule mockSchedules={mockSchedules} />
+            <UnitSchedule />
           </ScrollView>
         </>
       ) : (
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <CalendarListContents mockSchedules={mockSchedules} />
+          <CalendarListContents />
         </ScrollView>
       )}
     </>

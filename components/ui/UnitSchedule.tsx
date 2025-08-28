@@ -2,14 +2,10 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
-import type { ScheduleType } from '@/mock/schedule';
 
-export default function UnitSchedule({
-  mockSchedules,
-}: {
-  mockSchedules: ScheduleType[];
-}) {
-  const { currentYear, currentMonth, currentDate } = useDayStore();
+export default function UnitSchedule() {
+  const { currentYear, currentMonth, currentDate, mockSchedules } =
+    useDayStore();
 
   // 選択したセルの日付に対応するスケジュールを抽出
   const selectedSchedules = useMemo(() => {
