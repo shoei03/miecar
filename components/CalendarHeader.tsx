@@ -28,7 +28,7 @@ const CalendarHeader = memo(function CalendarHeader() {
       </TouchableOpacity>
       <View style={styles.headerCenter}>
         <Text style={styles.headerMonthText}>
-          {currentYear}年{currentMonth + 1}月
+          {currentYear}年{currentMonth}月
         </Text>
       </View>
       <TouchableOpacity onPress={() => handleChangeMonth(1)}>

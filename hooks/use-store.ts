@@ -24,7 +24,7 @@ interface DayStoreState {
 export const useDayStore = create<DayStoreState>(set => ({
   today: new Date(),
   currentYear: new Date().getFullYear(),
-  currentMonth: new Date().getMonth(),
+  currentMonth: new Date().getMonth() + 1,
   currentDate: new Date().getDate(),
   daysInMonth: new Date().getDate(),
   firstDayOfMonth: new Date().getDay(),
