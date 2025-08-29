@@ -10,8 +10,9 @@ export default function ModalContents() {
   const { setModalVisible } = useDayStore();
 
   const handleRouter = useCallback(() => {
+    setModalVisible(false);
     router.push('/add-schedule');
-  }, [router]);
+  }, [router, setModalVisible]);
 
   return (
     <View style={styles.container}>

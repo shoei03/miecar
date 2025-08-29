@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -16,7 +16,6 @@ import { useDayStore } from '@/hooks/use-store';
 import type { formDataType } from '@/types/form';
 
 export default function AddScheduleScreen() {
-  const { setModalVisible } = useDayStore();
   const { currentDate, currentMonth, currentYear } = useDayStore();
   const [formData, setFormData] = useState<formDataType>({
     purpose: '',
@@ -29,17 +28,23 @@ export default function AddScheduleScreen() {
     color: '#007AFF',
   });
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
+    // TODO: 変更がある場合は確認ダイアログを表示
     router.back();
-    // TODO: 先に閉じる
-    setModalVisible(false);
-  };
+  }, []);
 
-  const handleSave = () => {
-    Alert.alert('保存完了', '予定が正常に保存されました。', [
+  const handleSave = useCallback(() => {
+    // TODO: データベースへの保存処理を実装
+    // TODO: グローバルステートの更新処理を実装
+    // 成功時
+    // Alert.alert('保存完了', '予定が正常に保存されました。', [
+    //   { text: 'OK', onPress: () => router.back() },
+    // ]);
+    // 失敗時
+    Alert.alert('保存失敗', '予定の保存に失敗しました。', [
       { text: 'OK', onPress: () => router.back() },
     ]);
-  };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,59 +104,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
-  },
-  required: {
-    color: '#FF3B30',
-    fontSize: 14,
-  },
-  textInput: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  previewContainer: {
-    marginBottom: 40,
-  },
-  preview: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E5E5EA',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  colorPreview: {
-    width: 20,
-    height: 60,
-    borderRadius: 4,
-    marginRight: 16,
-  },
-  previewContent: {
-    flex: 1,
-  },
-  previewTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1C1C1E',
-    marginBottom: 4,
-  },
-  previewSubtitle: {
-    fontSize: 14,
-    color: '#8E8E93',
-    marginBottom: 2,
   },
 });
