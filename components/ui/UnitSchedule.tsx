@@ -1,11 +1,17 @@
+import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useDayStore } from '@/hooks/use-store';
 
 export default function UnitSchedule() {
   const { currentYear, currentMonth, currentDate, mockSchedules } =
     useDayStore();
+
+  const router = useRouter();
+  const handleDetailSchedule = () => {
+    router.push('/(schedule)/edit');
+  };
 
   // 選択したセルの日付に対応するスケジュールを抽出
   const selectedSchedules = useMemo(() => {
@@ -23,14 +29,18 @@ export default function UnitSchedule() {
         {currentYear}年{currentMonth + 1}月{currentDate}日 (火)
       </Text>
       {selectedSchedules.map(schedule => (
-        <View key={schedule.id} style={styles.scheduleDetail}>
+        <TouchableOpacity
+          key={schedule.id}
+          style={styles.scheduleDetail}
+          onPress={handleDetailSchedule}
+        >
           <View style={styles.scheduleTime}>
             <Text style={styles.timeText}>{schedule.startTime}</Text>
             <Text style={styles.timeSeparator}>-</Text>
             <Text style={styles.timeText}>{schedule.endTime}</Text>
           </View>
           <Text style={styles.schedulePurpose}>{schedule.purpose}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );

@@ -11,7 +11,7 @@ export default function ModalContents() {
 
   const handleRouter = useCallback(() => {
     setModalVisible(false);
-    router.push('/add-schedule');
+    router.push('/(schedule)/add');
   }, [router, setModalVisible]);
 
   return (
