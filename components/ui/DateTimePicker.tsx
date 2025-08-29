@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
+import { useValidation } from '@/hooks/use-validation';
 import type { formDataType } from '@/types/form';
 
 export default function DateTimePicker({
@@ -57,6 +58,8 @@ export default function DateTimePicker({
     }));
   };
 
+  const { errors, validate } = useValidation();
+
   return (
     <>
       {/* 使用目的 */}
@@ -95,7 +98,13 @@ export default function DateTimePicker({
             minute: '2-digit',
           })}
           onPress={() => showPicker('startTime')}
+          onBlur={() =>
+            validate(['startTime'], {
+              startTime: formData.startTime.toString(),
+            })
+          }
         />
+        <Text style={styles.errorText}>{errors.startTime}</Text>
       </View>
 
       {/* 終了時刻入力 */}
@@ -118,7 +127,14 @@ export default function DateTimePicker({
             minute: '2-digit',
           })}
           onPress={() => showPicker('endTime')}
+          onBlur={() =>
+            validate(['endTime'], {
+              startTime: formData.startTime.toString(),
+              endTime: formData.endTime.toString(),
+            })
+          }
         />
+        <Text style={styles.errorText}>{errors.endTime}</Text>
       </View>
 
       {/* 日付入力 */}
@@ -141,6 +157,9 @@ export default function DateTimePicker({
               style={styles.dateInput}
               value={formData.year.toString()}
               onPress={() => showPicker('date')}
+              onBlur={() =>
+                validate(['date'], { date: formData.year.toString() })
+              }
             />
           </View>
           <View style={styles.dateInputWrapper}>
@@ -149,6 +168,9 @@ export default function DateTimePicker({
               style={styles.dateInput}
               value={formData.month.toString()}
               onPress={() => showPicker('date')}
+              onBlur={() =>
+                validate(['date'], { date: formData.month.toString() })
+              }
             />
           </View>
           <View style={styles.dateInputWrapper}>
@@ -157,9 +179,13 @@ export default function DateTimePicker({
               style={styles.dateInput}
               value={formData.day.toString()}
               onPress={() => showPicker('date')}
+              onBlur={() =>
+                validate(['date'], { date: formData.day.toString() })
+              }
             />
           </View>
         </View>
+        <Text style={styles.errorText}>{errors.date}</Text>
       </View>
 
       {/* 使用者名 */}
@@ -237,5 +263,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+  },
+  errorText: {
+    color: '#FF3B30',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

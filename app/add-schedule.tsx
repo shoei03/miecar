@@ -17,53 +17,6 @@ import type { formDataType } from '@/types/form';
 
 export default function AddScheduleScreen() {
   const { setModalVisible } = useDayStore();
-
-  const handleBack = () => {
-    router.back();
-    // TODO: 先に閉じる
-    setModalVisible(false);
-  };
-
-  const validateForm = () => {
-    const requiredFields = [
-      'purpose',
-      'startTime',
-      'endTime',
-      'day',
-      'month',
-      'year',
-      'userName',
-    ];
-    const missingFields = requiredFields.filter(
-      field => !formData[field].trim()
-    );
-
-    if (missingFields.length > 0) {
-      Alert.alert('入力エラー', 'すべての必須項目を入力してください。');
-      return false;
-    }
-
-    // 日付の妥当性チェック
-    const day = parseInt(formData.day);
-    const month = parseInt(formData.month);
-    const year = parseInt(formData.year);
-
-    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 2024) {
-      Alert.alert('入力エラー', '正しい日付を入力してください。');
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSave = () => {
-    if (validateForm()) {
-      Alert.alert('保存完了', '予定が正常に保存されました。', [
-        { text: 'OK', onPress: () => router.back() },
-      ]);
-    }
-  };
-
   const { currentDate, currentMonth, currentYear } = useDayStore();
   const [formData, setFormData] = useState<formDataType>({
     purpose: '',
@@ -75,6 +28,18 @@ export default function AddScheduleScreen() {
     userName: '',
     color: '#007AFF',
   });
+
+  const handleBack = () => {
+    router.back();
+    // TODO: 先に閉じる
+    setModalVisible(false);
+  };
+
+  const handleSave = () => {
+    Alert.alert('保存完了', '予定が正常に保存されました。', [
+      { text: 'OK', onPress: () => router.back() },
+    ]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
