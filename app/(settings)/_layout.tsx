@@ -11,6 +11,13 @@ export default function SettingsLayout() {
         }}
       />
       <Stack.Screen
+        name='auth'
+        options={{
+          title: '認証',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name='general'
         options={{
           title: '一般',

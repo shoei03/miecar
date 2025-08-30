@@ -166,19 +166,19 @@ export default function SettingsScreen() {
             <SettingLinkItem
               icon='key-outline'
               title={text.changePassword}
-              href='/(auth)/change-password'
+              href='/auth/change-password'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='mail-outline'
               title={text.changeEmail}
-              href='/(auth)/change-email'
+              href='/auth/change-email'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='shield-checkmark-outline'
               title={text.privacy}
-              href='(auth)/privacy-settings'
+              href='/auth/privacy-settings'
             />
           </View>
 
@@ -198,13 +198,13 @@ export default function SettingsScreen() {
             <SettingLinkItem
               icon='log-in-outline'
               title={text.login}
-              href='/(auth)/login'
+              href='/auth/login'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='person-add-outline'
               title={text.signup}
-              href='/(auth)/signup'
+              href='/auth/signup'
             />
           </View>
         </>
