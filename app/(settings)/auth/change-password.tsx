@@ -10,49 +10,30 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
+import { useChangePassword } from '@/hooks/auth/use-change-password';
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
     confirm: false,
   });
-
-  const handleChangePassword = () => {
-    try {
-      // TODO: 古いパスワードと新しいパスワードが異なることを確認
-      // TODO: 新しいパスワードが確認用パスワードと一致することを確認
-      // TODO: 古いパスワードと新しいパスワードをDBに送信して更新処理を実装
-      router.back();
-      Toast.show({
-        type: 'success',
-        text1: 'パスワードを変更しました。',
-      });
-    } catch (error) {
-      router.back();
-      Toast.show({
-        type: 'error',
-        text1: 'パスワード変更に失敗しました。',
-        text2: (error as Error).message,
-      });
-    }
-  };
-
   const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
     setShowPasswords(prev => ({
       ...prev,
       [field]: !prev[field],
     }));
   };
+
+  const [formData, setFormData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const { handleChangePassword } = useChangePassword();
 
   return (
     <SafeAreaView style={styles.container}>

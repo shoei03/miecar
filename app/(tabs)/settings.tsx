@@ -4,12 +4,12 @@ import { SettingItem } from '@/components/ui/SettingItem';
 import { SettingLinkItem } from '@/components/ui/SettingLinkItem';
 import { Colors } from '@/constants/Colors';
 import { textSettingsScreen } from '@/constants/Texts';
-import { useAuthStore, useUserStore } from '@/hooks/use-store';
+import { useDeleteAccount } from '@/hooks/auth/use-delete';
+import { useLogout } from '@/hooks/auth/use-logout';
+import { useAuthStore } from '@/hooks/use-store';
 
 export default function SettingsScreen() {
-  const { isAuthenticated, setIsAuthenticated } = useAuthStore();
-  const { setUser } = useUserStore();
-
+  const { isAuthenticated } = useAuthStore();
   const showLogoutConfirmation = () => {
     Alert.alert('ログアウト', 'ログアウトしますか？', [
       { text: 'キャンセル', style: 'cancel' },
@@ -20,12 +20,6 @@ export default function SettingsScreen() {
       },
     ]);
   };
-
-  const handleLogout = () => {
-    // TODO: バックエンドにログアウトを知らせる
-    setIsAuthenticated(false);
-  };
-
   const showDeleteAccountConfirmation = () => {
     Alert.alert(
       'アカウント削除',
@@ -41,10 +35,8 @@ export default function SettingsScreen() {
     );
   };
 
-  const handleDeleteAccount = () => {
-    // TODO: バックエンドにアカウント削除を知らせる
-    setUser(null);
-  };
+  const { handleLogout } = useLogout();
+  const { handleDeleteAccount } = useDeleteAccount();
 
   const SectionHeader = ({ title }: { title: string }) => (
     <Text style={styles.sectionHeader}>{title}</Text>

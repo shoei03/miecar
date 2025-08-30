@@ -1,4 +1,4 @@
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { useState } from 'react';
 import {
   Text,
@@ -10,14 +10,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
-import { useUserStore } from '@/hooks/use-store';
+import { useSignup } from '@/hooks/auth/use-signup';
 
 export default function SignupScreen() {
-  const router = useRouter();
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,39 +22,13 @@ export default function SignupScreen() {
     password: '',
     confirmPassword: '',
   });
-
-  const { setUser } = useUserStore();
-
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
   };
-
-  const handleSignup = () => {
-    try {
-      // TODO: サインアップ処理を実装
-      setUser({
-        uid: '123',
-        email: formData.email,
-        displayName: formData.firstName,
-        createdAt: new Date(),
-      });
-      router.back();
-      Toast.show({
-        type: 'success',
-        text1: 'サインアップに成功しました！',
-      });
-    } catch (error) {
-      router.back();
-      Toast.show({
-        type: 'error',
-        text1: 'サインアップに失敗しました。',
-        text2: (error as Error).message,
-      });
-    }
-  };
+  const { handleSignup } = useSignup(formData);
 
   return (
     <KeyboardAvoidingView

@@ -1,4 +1,4 @@
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { useState } from 'react';
 import {
   Text,
@@ -10,38 +10,18 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
-import { useAuthStore } from '@/hooks/use-store';
+import { useLogin } from '@/hooks/auth/use-login';
 
 export default function LoginScreen() {
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const { setIsAuthenticated } = useAuthStore();
-
-  const handleLogin = () => {
-    try {
-      // TODO: ログイン処理をここに実装
-      setIsAuthenticated(true);
-      router.back();
-      Toast.show({
-        type: 'success',
-        text1: 'ログインに成功しました。',
-      });
-    } catch (error) {
-      router.back();
-      Toast.show({
-        type: 'error',
-        text1: 'ログインに失敗しました。',
-        text2: (error as Error).message,
-      });
-    }
-  };
+  const { handleLogin } = useLogin(formData);
 
   return (
     <SafeAreaView style={styles.container}>
