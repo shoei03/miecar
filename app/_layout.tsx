@@ -31,17 +31,8 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
-          name='add-schedule'
-          options={{
-            title: '予定を追加',
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
           name='(schedule)/[schedule]'
           options={{
-            title: '予定を追加',
             presentation: 'modal',
             headerShown: false,
           }}
