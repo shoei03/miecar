@@ -1,15 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
 import type { formDataType } from '@/types/form';
 
 const colorOptions = [
-  '#007AFF',
-  '#FF3B30',
-  '#FF9500',
-  '#FFCC00',
-  '#34C759',
-  '#5856D6',
+  Colors.light.tint,
+  Colors.light.success,
+  Colors.light.error,
+  Colors.light.warning,
 ];
 
 export default function ColorPicker({
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.light.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
   },
   selectedColor: {
     borderWidth: 3,
-    borderColor: '#1C1C1E',
+    borderColor: Colors.light.text,
   },
   formGroup: {
     marginBottom: 24,
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: Colors.light.subText,
     marginBottom: 8,
   },
 });

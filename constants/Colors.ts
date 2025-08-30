@@ -16,6 +16,7 @@ export const Colors = {
     tint: tintColorLight,
     error: '#FF3B30',
     success: '#4CD964',
+    warning: '#FF9500',
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
