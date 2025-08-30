@@ -16,34 +16,46 @@ export default function DateTimePicker({
   setFormData: React.Dispatch<React.SetStateAction<formDataType>>;
 }) {
   const [pickerVisibility, setPickerVisibility] = useState({
-    date: false,
+    startDate: false,
     startTime: false,
+    endDate: false,
     endTime: false,
   });
 
-  const showPicker = (type: 'date' | 'startTime' | 'endTime') => {
+  const showPicker = (
+    type: 'startDate' | 'startTime' | 'endDate' | 'endTime'
+  ) => {
     setPickerVisibility(prev => ({ ...prev, [type]: true }));
   };
 
-  const hidePicker = (type: 'date' | 'startTime' | 'endTime') => {
+  const hidePicker = (
+    type: 'startDate' | 'startTime' | 'endDate' | 'endTime'
+  ) => {
     setPickerVisibility(prev => ({ ...prev, [type]: false }));
   };
 
   const handlePickerConfirm = (
-    type: 'date' | 'startTime' | 'endTime',
+    type: 'startDate' | 'startTime' | 'endDate' | 'endTime',
     date: Date
   ) => {
-    if (type === 'date') {
+    if (type === 'startDate') {
       setFormData(prev => ({
         ...prev,
-        day: date.getDate(),
-        month: date.getMonth() + 1,
-        year: date.getFullYear(),
+        startDate: date.getDate(),
+        startMonth: date.getMonth() + 1,
+        startYear: date.getFullYear(),
       }));
     } else if (type === 'startTime') {
       setFormData(prev => ({
         ...prev,
         startTime: date,
+      }));
+    } else if (type === 'endDate') {
+      setFormData(prev => ({
+        ...prev,
+        endDate: date.getDate(),
+        endMonth: date.getMonth() + 1,
+        endYear: date.getFullYear(),
       }));
     } else if (type === 'endTime') {
       setFormData(prev => ({
@@ -88,8 +100,8 @@ export default function DateTimePicker({
           maxHeight={300}
           labelField='label'
           valueField='value'
-          placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder='Search...'
+          placeholder={!isFocus ? '使用者を選択' : '...'}
+          searchPlaceholder='名前で検索...'
           value={formData.userName}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -116,8 +128,8 @@ export default function DateTimePicker({
           maxHeight={300}
           labelField='label'
           valueField='value'
-          placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder='Search...'
+          placeholder={!isFocus ? '目的を選択' : '...'}
+          searchPlaceholder='目的で検索...'
           value={formData.purpose}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
@@ -128,7 +140,90 @@ export default function DateTimePicker({
         />
       </View>
 
-      {/* 開始時刻入力 */}
+      {/* 開始日時 */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>
+          開始日時 <Text style={styles.required}>*</Text>
+        </Text>
+        <View style={styles.dateTimeContainer}>
+          <View style={styles.dateTimeItem}>
+            <Text style={styles.dateTimeLabel}>日付</Text>
+            <TextInput
+              style={styles.textInput}
+              value={`${formData.startYear}/${formData.startMonth}/${formData.startDate}`}
+              onPress={() => showPicker('startDate')}
+              onBlur={() =>
+                validate(['date'], { date: formData.startYear.toString() })
+              }
+            />
+          </View>
+          <View style={styles.dateTimeItem}>
+            <Text style={styles.dateTimeLabel}>時間</Text>
+            <TextInput
+              style={styles.textInput}
+              value={formData.startTime.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+              onPress={() => showPicker('startTime')}
+              onBlur={() =>
+                validate(['startTime'], {
+                  startTime: formData.startTime.toString(),
+                })
+              }
+            />
+          </View>
+        </View>
+        <Text style={styles.errorText}>{errors.startTime || errors.date}</Text>
+      </View>
+
+      {/* 終了日時 */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>
+          終了日時 <Text style={styles.required}>*</Text>
+        </Text>
+        <View style={styles.dateTimeContainer}>
+          <View style={styles.dateTimeItem}>
+            <Text style={styles.dateTimeLabel}>日付</Text>
+            <TextInput
+              style={styles.textInput}
+              value={`${formData.startYear}/${formData.startMonth}/${formData.endDate}`}
+              onPress={() => showPicker('endDate')}
+              onBlur={() =>
+                validate(['date'], { date: formData.startYear.toString() })
+              }
+            />
+          </View>
+          <View style={styles.dateTimeItem}>
+            <Text style={styles.dateTimeLabel}>時間</Text>
+            <TextInput
+              style={styles.textInput}
+              value={formData.endTime.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+              onPress={() => showPicker('endTime')}
+              onBlur={() =>
+                validate(['endTime'], {
+                  startTime: formData.startTime.toString(),
+                  endTime: formData.endTime.toString(),
+                })
+              }
+            />
+          </View>
+        </View>
+        <Text style={styles.errorText}>{errors.endTime}</Text>
+      </View>
+
+      {/* DateTimePicker Modals */}
+      <DateTimePickerModal
+        isVisible={pickerVisibility.startDate}
+        mode='date'
+        onConfirm={date => handlePickerConfirm('startDate', date)}
+        onCancel={() => hidePicker('startDate')}
+        confirmTextIOS='完了'
+        cancelTextIOS='キャンセル'
+      />
       <DateTimePickerModal
         isVisible={pickerVisibility.startTime}
         mode='time'
@@ -137,27 +232,14 @@ export default function DateTimePicker({
         confirmTextIOS='完了'
         cancelTextIOS='キャンセル'
       />
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>
-          開始時刻 <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          value={formData.startTime.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-          onPress={() => showPicker('startTime')}
-          onBlur={() =>
-            validate(['startTime'], {
-              startTime: formData.startTime.toString(),
-            })
-          }
-        />
-        <Text style={styles.errorText}>{errors.startTime}</Text>
-      </View>
-
-      {/* 終了時刻入力 */}
+      <DateTimePickerModal
+        isVisible={pickerVisibility.endDate}
+        mode='date'
+        onConfirm={date => handlePickerConfirm('endDate', date)}
+        onCancel={() => hidePicker('endDate')}
+        confirmTextIOS='完了'
+        cancelTextIOS='キャンセル'
+      />
       <DateTimePickerModal
         isVisible={pickerVisibility.endTime}
         mode='time'
@@ -166,77 +248,6 @@ export default function DateTimePicker({
         confirmTextIOS='完了'
         cancelTextIOS='キャンセル'
       />
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>
-          終了時刻 <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          value={formData.endTime.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}
-          onPress={() => showPicker('endTime')}
-          onBlur={() =>
-            validate(['endTime'], {
-              startTime: formData.startTime.toString(),
-              endTime: formData.endTime.toString(),
-            })
-          }
-        />
-        <Text style={styles.errorText}>{errors.endTime}</Text>
-      </View>
-
-      {/* 日付入力 */}
-      <DateTimePickerModal
-        isVisible={pickerVisibility.date}
-        mode='date'
-        onConfirm={date => handlePickerConfirm('date', date)}
-        onCancel={() => hidePicker('date')}
-        confirmTextIOS='完了'
-        cancelTextIOS='キャンセル'
-      />
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>
-          日付 <Text style={styles.required}>*</Text>
-        </Text>
-        <View style={styles.dateContainer}>
-          <View style={styles.dateInputWrapper}>
-            <Text style={styles.dateLabel}>年</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={formData.year.toString()}
-              onPress={() => showPicker('date')}
-              onBlur={() =>
-                validate(['date'], { date: formData.year.toString() })
-              }
-            />
-          </View>
-          <View style={styles.dateInputWrapper}>
-            <Text style={styles.dateLabel}>月</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={formData.month.toString()}
-              onPress={() => showPicker('date')}
-              onBlur={() =>
-                validate(['date'], { date: formData.month.toString() })
-              }
-            />
-          </View>
-          <View style={styles.dateInputWrapper}>
-            <Text style={styles.dateLabel}>日</Text>
-            <TextInput
-              style={styles.dateInput}
-              value={formData.day.toString()}
-              onPress={() => showPicker('date')}
-              onBlur={() =>
-                validate(['date'], { date: formData.day.toString() })
-              }
-            />
-          </View>
-        </View>
-        <Text style={styles.errorText}>{errors.date}</Text>
-      </View>
     </>
   );
 }
@@ -271,6 +282,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
+  },
+  dateTimeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  dateTimeItem: {
+    flex: 1,
+  },
+  dateTimeLabel: {
+    fontSize: 12,
+    color: Colors.light.subText,
+    marginBottom: 4,
+    textAlign: 'center',
   },
   dateContainer: {
     flexDirection: 'row',

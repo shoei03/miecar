@@ -22,11 +22,14 @@ export default function AddScheduleScreen() {
     purpose: '',
     startTime: new Date(),
     endTime: new Date(),
-    day: currentDate,
-    month: currentMonth,
-    year: currentYear,
+    startDate: currentDate,
+    endDate: currentDate,
+    startMonth: currentMonth,
+    endMonth: currentMonth,
+    startYear: currentYear,
+    endYear: currentYear,
     userName: '',
-    color: '#007AFF',
+    color: Colors.light.tint,
   });
 
   const { schedule } = useLocalSearchParams();
