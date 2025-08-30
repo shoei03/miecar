@@ -1,29 +1,32 @@
-import { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, Alert } from 'react-native';
 
 import { SettingItem } from '@/components/ui/SettingItem';
 import { SettingLinkItem } from '@/components/ui/SettingLinkItem';
 import { Colors } from '@/constants/Colors';
 import { textSettingsScreen } from '@/constants/Texts';
+import { useAuthStore, useUserStore } from '@/hooks/use-store';
 
 export default function SettingsScreen() {
-  // TODO: 認証状態をグローバルステートから取得
-  const [auth] = useState<boolean>(false);
+  const { isAuthenticated, setIsAuthenticated } = useAuthStore();
+  const { setUser } = useUserStore();
 
-  const handleLogout = () => {
+  const showLogoutConfirmation = () => {
     Alert.alert('ログアウト', 'ログアウトしますか？', [
       { text: 'キャンセル', style: 'cancel' },
       {
         text: 'ログアウト',
         style: 'destructive',
-        onPress: () => {
-          // TODO: ログアウト処理を実装
-        },
+        onPress: handleLogout,
       },
     ]);
   };
 
-  const handleDeleteAccount = () => {
+  const handleLogout = () => {
+    // TODO: バックエンドにログアウトを知らせる
+    setIsAuthenticated(false);
+  };
+
+  const showDeleteAccountConfirmation = () => {
     Alert.alert(
       'アカウント削除',
       'この操作は取り消せません。本当にアカウントを削除しますか？',
@@ -32,12 +35,15 @@ export default function SettingsScreen() {
         {
           text: '削除',
           style: 'destructive',
-          onPress: () => {
-            // TODO: アカウント削除処理を実装
-          },
+          onPress: handleDeleteAccount,
         },
       ]
     );
+  };
+
+  const handleDeleteAccount = () => {
+    // TODO: バックエンドにアカウント削除を知らせる
+    setUser(null);
   };
 
   const SectionHeader = ({ title }: { title: string }) => (
@@ -46,14 +52,14 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {auth ? (
+      {isAuthenticated ? (
         <>
           <SectionHeader title={textSettingsScreen.account} />
           <View style={styles.section}>
             <SettingItem
               icon='log-out-outline'
               title={textSettingsScreen.logout}
-              onPress={handleLogout}
+              onPress={showLogoutConfirmation}
             />
           </View>
 
@@ -82,7 +88,7 @@ export default function SettingsScreen() {
             <SettingItem
               icon='trash-outline'
               title={textSettingsScreen.deleteAccount}
-              onPress={handleDeleteAccount}
+              onPress={showDeleteAccountConfirmation}
               type='destructive'
             />
           </View>

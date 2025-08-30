@@ -13,6 +13,7 @@ import {
 import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
+import { useAuthStore } from '@/hooks/use-store';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -21,10 +22,12 @@ export default function LoginScreen() {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
+  const { setIsAuthenticated } = useAuthStore();
 
   const handleLogin = () => {
     try {
       // TODO: ログイン処理をここに実装
+      setIsAuthenticated(true);
       router.back();
       Toast.show({
         type: 'success',

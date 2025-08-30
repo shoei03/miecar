@@ -13,6 +13,7 @@ import {
 import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
+import { useUserStore } from '@/hooks/use-store';
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -25,6 +26,8 @@ export default function SignupScreen() {
     confirmPassword: '',
   });
 
+  const { setUser } = useUserStore();
+
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -35,6 +38,12 @@ export default function SignupScreen() {
   const handleSignup = () => {
     try {
       // TODO: サインアップ処理を実装
+      setUser({
+        uid: '123',
+        email: formData.email,
+        displayName: formData.firstName,
+        createdAt: new Date(),
+      });
       router.back();
       Toast.show({
         type: 'success',

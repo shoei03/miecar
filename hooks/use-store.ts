@@ -59,10 +59,20 @@ interface UserStoreState {
 
 export const useUserStore = create<UserStoreState>(set => ({
   user: {
-    uid: '',
-    email: '',
-    displayName: '',
+    uid: 'user123',
+    email: 'shoei@gmail.com',
+    displayName: 'しょーん',
     createdAt: new Date(),
   },
   setUser: (user: UserProfile | null) => set({ user }),
+}));
+
+interface AuthStoreState {
+  isAuthenticated: boolean;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+}
+
+export const useAuthStore = create<AuthStoreState>(set => ({
+  isAuthenticated: true,
+  setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
 }));
