@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 export default function UnitSchedule() {
@@ -49,6 +50,10 @@ export default function UnitSchedule() {
 const styles = StyleSheet.create({
   scheduleDetail: {
     marginBottom: 16,
+    padding: 16,
+    backgroundColor: Colors.light.background,
+    shadowColor: Colors.light.shadow,
+    borderRadius: 12,
   },
   scheduleTime: {
     flexDirection: 'row',
@@ -57,17 +62,17 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: Colors.light.text,
     fontWeight: '500',
   },
   timeSeparator: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: Colors.light.subText,
     marginHorizontal: 8,
   },
   schedulePurpose: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: Colors.light.subText,
   },
   selectedDateSection: {
     marginHorizontal: 20,
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
   },
   selectedDateText: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: Colors.light.subText,
     marginBottom: 16,
   },
 });

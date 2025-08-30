@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
+import { Colors } from '@/constants/Colors';
 import { useValidation } from '@/hooks/use-validation';
 import type { formDataType } from '@/types/form';
 
@@ -216,11 +217,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: Colors.light.subText,
     marginBottom: 8,
   },
   required: {
-    color: '#FF3B30',
+    color: Colors.light.error,
     fontSize: 14,
   },
   textInput: {
@@ -229,8 +230,8 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
-    shadowColor: '#000',
+    borderColor: Colors.light.border,
+    shadowColor: Colors.light.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
@@ -246,26 +247,26 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 12,
-    color: '#8E8E93',
+    color: Colors.light.subText,
     marginBottom: 4,
     textAlign: 'center',
   },
   dateInput: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.light.background,
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
+    borderColor: Colors.light.border,
     textAlign: 'center',
-    shadowColor: '#000',
+    shadowColor: Colors.light.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
   },
   errorText: {
-    color: '#FF3B30',
+    color: Colors.light.error,
     fontSize: 12,
     marginTop: 4,
   },

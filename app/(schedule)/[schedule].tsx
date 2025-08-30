@@ -12,6 +12,7 @@ import {
 
 import ColorPicker from '@/components/ui/ColorPicker';
 import DateTimePicker from '@/components/ui/DateTimePicker';
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 import type { formDataType } from '@/types/form';
 
@@ -86,7 +87,7 @@ export default function AddScheduleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: Colors.light.subBackground,
   },
   header: {
     flexDirection: 'row',
@@ -94,10 +95,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: 'white',
+    backgroundColor: Colors.light.background,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E5EA',
-    shadowColor: '#000',
+    borderBottomColor: Colors.light.border,
+    shadowColor: Colors.light.shadow,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -105,16 +106,16 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     fontSize: 16,
-    color: '#007AFF',
+    color: Colors.light.tint,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: Colors.light.text,
   },
   saveButton: {
     fontSize: 16,
-    color: '#007AFF',
+    color: Colors.light.tint,
     fontWeight: '600',
   },
   content: {

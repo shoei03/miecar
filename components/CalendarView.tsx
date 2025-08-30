@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import CalendarContents from '@/components/ui/CalendarContents';
 import CalendarListContents from '@/components/ui/CalendarListContents';
 import UnitSchedule from '@/components/ui/UnitSchedule';
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 const CalendarView = memo(function CalendarView() {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
   calendarDivider: {
     height: 1,
-    backgroundColor: '#E5E5EA',
+    backgroundColor: Colors.light.subText,
     marginHorizontal: 20,
     marginBottom: 8,
   },

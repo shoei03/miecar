@@ -27,14 +27,24 @@ export default function RootLayout() {
         <Stack.Screen
           name='(tabs)'
           options={{
+            title: 'ホーム',
             headerShown: false,
           }}
         />
         <Stack.Screen
           name='(schedule)/[schedule]'
           options={{
-            presentation: 'modal',
+            title: 'スケジュール詳細',
             headerShown: false,
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name='(settings)'
+          options={{
+            title: '設定',
+            headerShown: false,
+            presentation: 'modal',
           }}
         />
         <Stack.Screen name='+not-found' />

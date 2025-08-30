@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useCallback, memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 // 日付セルコンポーネント
@@ -117,11 +118,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F2F2F7',
+    shadowColor: Colors.light.shadow,
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    shadowOffset: { width: 2, height: 2 }, // 右下方向にシャドウ
+    elevation: 4,
   },
   weekDayText: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: Colors.light.subText,
     fontWeight: '500',
   },
   daysContainer: {
@@ -131,6 +136,7 @@ const styles = StyleSheet.create({
   },
   dayCell: {
     width: '14.285%', // 7分の1
+    height: '20%',
     aspectRatio: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
@@ -139,18 +145,18 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: Colors.light.text,
   },
   selectedDay: {
-    backgroundColor: '#daf5e0ff',
+    backgroundColor: Colors.light.tint,
     borderRadius: 10,
   },
   selectedDayText: {
-    color: 'black',
+    color: Colors.light.background,
     fontWeight: '600',
   },
   todayCell: {
-    borderColor: '#34C759',
+    borderColor: Colors.light.tint,
     borderRadius: 28,
   },
   todayText: {
@@ -162,7 +168,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#34C759',
+    backgroundColor: Colors.light.tint,
   },
   emptyDay: {
     width: '14.285%',

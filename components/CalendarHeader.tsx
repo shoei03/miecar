@@ -3,6 +3,7 @@ import { memo, useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import ToggleGroups from '@/components/ui/ToggleGroups';
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 const CalendarHeader = memo(function CalendarHeader() {
@@ -24,7 +25,11 @@ const CalendarHeader = memo(function CalendarHeader() {
         <ToggleGroups />
       </View>
       <TouchableOpacity onPress={() => handleChangeMonth(-1)}>
-        <Ionicons name='arrow-back' size={20} color='#1C1C1E' />
+        <Ionicons
+          name='arrow-back'
+          size={20}
+          color={Colors.light.tabIconDefault}
+        />
       </TouchableOpacity>
       <View style={styles.headerCenter}>
         <Text style={styles.headerMonthText}>
@@ -32,7 +37,11 @@ const CalendarHeader = memo(function CalendarHeader() {
         </Text>
       </View>
       <TouchableOpacity onPress={() => handleChangeMonth(1)}>
-        <Ionicons name='arrow-forward' size={20} color='#1C1C1E' />
+        <Ionicons
+          name='arrow-forward'
+          size={20}
+          color={Colors.light.tabIconDefault}
+        />
       </TouchableOpacity>
       <View style={styles.headerRight}>
         {/* TODO:家族カレンダーの切り替えボタンを設置 */}
@@ -50,6 +59,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     paddingTop: 16,
+    backgroundColor: Colors.light.background,
   },
   headerLeft: {
     flex: 1,
@@ -65,7 +75,7 @@ const styles = StyleSheet.create({
   headerMonthText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1C1C1E',
+    color: Colors.light.text,
   },
   headerRight: {
     flex: 1,

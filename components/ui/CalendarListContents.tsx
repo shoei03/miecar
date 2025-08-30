@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 export default function CalendarListContents() {
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
   },
   listNoSchedule: {
-    color: '#C7C7CC',
+    color: Colors.light.subText,
     fontSize: 14,
     fontStyle: 'italic',
     textAlignVertical: 'center', // Android用
@@ -102,28 +103,28 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   listScheduleItem: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
     borderRadius: 8,
     padding: 8,
     marginBottom: 4,
-    shadowColor: '#000',
+    shadowColor: Colors.light.shadow,
     shadowOpacity: 0.08,
     shadowRadius: 2,
     shadowOffset: { width: 2, height: 2 }, // 右下方向にシャドウ
-    elevation: 2,
+    elevation: 4,
   },
   schedulePurpose: {
     fontSize: 14,
-    color: '#8E8E93',
+    color: Colors.light.subText,
   },
   timeText: {
     fontSize: 16,
-    color: '#1C1C1E',
+    color: Colors.light.text,
     fontWeight: '500',
   },
   timeSeparator: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: Colors.light.subText,
     marginHorizontal: 8,
   },
   scheduleTime: {
