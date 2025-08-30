@@ -1,35 +1,10 @@
-import { useState, version } from 'react';
+import { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, Alert } from 'react-native';
 
 import { SettingItem } from '@/components/ui/SettingItem';
 import { SettingLinkItem } from '@/components/ui/SettingLinkItem';
 import { Colors } from '@/constants/Colors';
-
-const text = {
-  title: '設定',
-  account: 'アカウント',
-  login: 'ログイン',
-  signup: '新規アカウントを作成',
-  logout: 'ログアウト',
-  security: 'セキュリティ',
-  changePassword: 'パスワードを変更',
-  changeEmail: 'メールアドレスを変更',
-  privacy: 'プライバシー設定',
-  deleteAccount: 'アカウントを削除',
-  general: '一般',
-  notifications: '通知',
-  theme: 'テーマ',
-  language: '言語',
-  support: 'サポート',
-  help: 'ヘルプ',
-  contact: 'お問い合わせ',
-  feedback: 'フィードバック',
-  about: 'アプリについて',
-  version: `バージョン ${version}`,
-  termsOfService: '利用規約',
-  privacyPolicy: 'プライバシーポリシー',
-  licenses: 'ライセンス',
-};
+import { textSettingsScreen } from '@/constants/Texts';
 
 export default function SettingsScreen() {
   // TODO: 認証状態をグローバルステートから取得
@@ -73,32 +48,32 @@ export default function SettingsScreen() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {auth ? (
         <>
-          <SectionHeader title={text.account} />
+          <SectionHeader title={textSettingsScreen.account} />
           <View style={styles.section}>
             <SettingItem
               icon='log-out-outline'
-              title={text.logout}
+              title={textSettingsScreen.logout}
               onPress={handleLogout}
             />
           </View>
 
-          <SectionHeader title={text.security} />
+          <SectionHeader title={textSettingsScreen.security} />
           <View style={styles.section}>
             <SettingLinkItem
               icon='key-outline'
-              title={text.changePassword}
+              title={textSettingsScreen.changePassword}
               href='/auth/change-password'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='mail-outline'
-              title={text.changeEmail}
+              title={textSettingsScreen.changeEmail}
               href='/auth/change-email'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='shield-checkmark-outline'
-              title={text.privacy}
+              title={textSettingsScreen.privacy}
               href='/auth/privacy-settings'
             />
           </View>
@@ -106,7 +81,7 @@ export default function SettingsScreen() {
           <View style={styles.section}>
             <SettingItem
               icon='trash-outline'
-              title={text.deleteAccount}
+              title={textSettingsScreen.deleteAccount}
               onPress={handleDeleteAccount}
               type='destructive'
             />
@@ -114,88 +89,88 @@ export default function SettingsScreen() {
         </>
       ) : (
         <>
-          <SectionHeader title={text.account} />
+          <SectionHeader title={textSettingsScreen.account} />
           <View style={styles.section}>
             <SettingLinkItem
               icon='log-in-outline'
-              title={text.login}
+              title={textSettingsScreen.login}
               href='/auth/login'
             />
             <View style={styles.separator} />
             <SettingLinkItem
               icon='person-add-outline'
-              title={text.signup}
+              title={textSettingsScreen.signup}
               href='/auth/signup'
             />
           </View>
         </>
       )}
 
-      <SectionHeader title={text.general} />
+      <SectionHeader title={textSettingsScreen.general} />
       <View style={styles.section}>
         <SettingLinkItem
           icon='notifications-outline'
-          title={text.notifications}
+          title={textSettingsScreen.notifications}
           href='(settings)/general/notification-settings'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='color-palette-outline'
-          title={text.theme}
+          title={textSettingsScreen.theme}
           href='(settings)/general/theme-settings'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='language-outline'
-          title={text.language}
+          title={textSettingsScreen.language}
           href='(settings)/general/language-settings'
         />
       </View>
 
-      <SectionHeader title={text.support} />
+      <SectionHeader title={textSettingsScreen.support} />
       <View style={styles.section}>
         <SettingLinkItem
           icon='help-circle-outline'
-          title={text.help}
+          title={textSettingsScreen.help}
           href='(settings)/support/help'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='mail-outline'
-          title={text.contact}
+          title={textSettingsScreen.contact}
           href='(settings)/support/contact'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='chatbubble-outline'
-          title={text.feedback}
+          title={textSettingsScreen.feedback}
           href='(settings)/support/feedback'
         />
       </View>
 
-      <SectionHeader title={text.about} />
+      <SectionHeader title={textSettingsScreen.about} />
       <View style={styles.section}>
         <SettingLinkItem
           icon='information-circle-outline'
-          title={text.version}
+          title={textSettingsScreen.version}
           href='(settings)/about/version-info'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='document-text-outline'
-          title={text.termsOfService}
+          title={textSettingsScreen.termsOfService}
           href='(settings)/about/terms-of-service'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='lock-closed-outline'
-          title={text.privacyPolicy}
+          title={textSettingsScreen.privacyPolicy}
           href='(settings)/about/privacy-policy'
         />
         <View style={styles.separator} />
         <SettingLinkItem
           icon='library-outline'
-          title={text.licenses}
+          title={textSettingsScreen.licenses}
           href='(settings)/about/licenses'
         />
       </View>
