@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useCallback, memo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 const ToggleGroups = memo(function ToggleGroups() {
@@ -22,7 +23,11 @@ const ToggleGroups = memo(function ToggleGroups() {
         <Ionicons
           name='calendar'
           size={20}
-          color={viewMode === 'calendar' ? '#34C759' : '#8E8E93'}
+          color={
+            viewMode === 'calendar'
+              ? Colors.light.background
+              : Colors.light.tint
+          }
         />
       </View>
       <View
@@ -34,7 +39,9 @@ const ToggleGroups = memo(function ToggleGroups() {
         <Ionicons
           name='list'
           size={20}
-          color={viewMode === 'list' ? '#34C759' : '#8E8E93'}
+          color={
+            viewMode === 'list' ? Colors.light.background : Colors.light.tint
+          }
         />
       </View>
     </TouchableOpacity>
@@ -49,9 +56,9 @@ const styles = StyleSheet.create({
     gap: 0,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
     borderWidth: 1,
-    borderColor: '#E5E5EA',
+    borderColor: Colors.light.tint,
   },
   toggleIconButton: {
     paddingHorizontal: 8,
@@ -61,9 +68,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   toggleActive: {
-    backgroundColor: '#eafbe7',
+    backgroundColor: Colors.light.tint,
   },
   toggleInactive: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
   },
 });

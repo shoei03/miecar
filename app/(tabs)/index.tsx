@@ -5,6 +5,7 @@ import CalendarHeader from '@/components/CalendarHeader';
 import CalendarView from '@/components/CalendarView';
 import Button from '@/components/ui/Button';
 import ModalContents from '@/components/ui/ModalContents';
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 import { mockSchedules, type ScheduleType } from '@/mock/schedule'; // モックデータのインポート
 
@@ -62,7 +63,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.light.subBackground,
   },
   addButton: {
     position: 'absolute',
