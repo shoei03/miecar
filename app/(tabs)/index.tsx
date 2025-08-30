@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from 'react';
-import { Modal, SafeAreaView, StyleSheet } from 'react-native';
+import { Button, Modal, SafeAreaView, StyleSheet } from 'react-native';
 
 import CalendarHeader from '@/components/CalendarHeader';
 import CalendarView from '@/components/CalendarView';
-import Button from '@/components/ui/Button';
 import ModalContents from '@/components/ui/ModalContents';
 import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
@@ -40,11 +39,7 @@ export default function HomeScreen() {
       <CalendarView />
 
       {/* 予定を追加するボタン */}
-      <Button
-        outerStyles={styles.addButton}
-        setModalVisible={setModalVisible}
-        label='予定を追加'
-      />
+      <Button title='予定を追加' onPress={() => setModalVisible(true)} />
 
       {/* 予定追加モーダル */}
       <Modal

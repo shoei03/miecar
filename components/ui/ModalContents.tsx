@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Colors } from '@/constants/Colors';
 import { useDayStore } from '@/hooks/use-store';
 
 export default function ModalContents() {
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContentWrapper: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: Colors.light.background,
   },
   title: {
     fontSize: 18,
@@ -58,18 +59,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 24,
     minHeight: 220,
-    shadowColor: '#000',
+    shadowColor: Colors.light.shadow,
     shadowOpacity: 0.12,
     shadowRadius: 8,
     elevation: 8,
   },
   modalAddButton: {
-    backgroundColor: '#34C759',
+    backgroundColor: Colors.light.tint,
     borderRadius: 24,
     paddingHorizontal: 32,
     paddingVertical: 12,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   modalAddButtonText: {
-    color: '#fff',
+    color: Colors.light.background,
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
