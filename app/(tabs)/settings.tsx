@@ -8,7 +8,7 @@ import { textSettingsScreen } from '@/constants/Texts';
 
 export default function SettingsScreen() {
   // TODO: 認証状態をグローバルステートから取得
-  const [auth] = useState<boolean>(true);
+  const [auth] = useState<boolean>(false);
 
   const handleLogout = () => {
     Alert.alert('ログアウト', 'ログアウトしますか？', [
