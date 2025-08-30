@@ -1,7 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import ColorPicker from '@/components/ui/ColorPicker';
 import DateTimePicker from '@/components/ui/DateTimePicker';
@@ -52,16 +52,23 @@ export default function AddScheduleScreen() {
   }, []);
 
   const handleSave = () => {
-    // TODO: データベースへの保存処理を実装
-    // TODO: グローバルステートの更新処理を実装
-    // 成功時
-    // Alert.alert(text.saveAlertTitle, text.saveAlertMessage, [
-    //   { text: 'OK', onPress: () => router.back() },
-    // ]);
-    // 失敗時
-    Alert.alert(text.saveAlertTitle, text.saveErrorMessage, [
-      { text: 'OK', onPress: () => router.back() },
-    ]);
+    try {
+      // TODO: データベースへの保存処理を実装
+      // TODO: グローバルステートの更新処理を実装
+      router.back();
+      Toast.show({
+        type: 'success',
+        text1: text.saveAlertTitle,
+        text2: text.saveAlertMessage,
+      });
+    } catch (error) {
+      router.back();
+      Toast.show({
+        type: 'error',
+        text1: text.saveAlertTitle,
+        text2: (error as Error).message,
+      });
+    }
   };
 
   return (
