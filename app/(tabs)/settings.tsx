@@ -1,14 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
 import { useState, version } from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Alert } from 'react-native';
+
+import { SettingItem } from '@/components/ui/SettingItem';
+import { SettingLinkItem } from '@/components/ui/SettingLinkItem';
+import { Colors } from '@/constants/Colors';
 
 const text = {
   title: '設定',
@@ -70,86 +65,12 @@ export default function SettingsScreen() {
     );
   };
 
-  const SettingItem = ({
-    icon,
-    title,
-    onPress,
-    type = 'default',
-  }: {
-    icon: keyof typeof Ionicons.glyphMap;
-    title: string;
-    onPress?: () => void;
-    type?: 'default' | 'destructive';
-  }) => (
-    <TouchableOpacity
-      style={styles.settingItem}
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
-      <View style={styles.settingItemContent}>
-        <Ionicons
-          name={icon}
-          size={24}
-          color={type === 'destructive' ? '#FF3B30' : '#007AFF'}
-          style={styles.icon}
-        />
-        <Text
-          style={[
-            styles.settingText,
-            type === 'destructive' && styles.destructiveText,
-          ]}
-        >
-          {title}
-        </Text>
-      </View>
-      <Ionicons name='chevron-forward' size={20} color='#C7C7CC' />
-    </TouchableOpacity>
-  );
-
-  const SettingLinkItem = ({
-    icon,
-    title,
-    href,
-    type = 'default',
-  }: {
-    icon: keyof typeof Ionicons.glyphMap;
-    title: string;
-    href: string;
-    type?: 'default' | 'destructive';
-  }) => (
-    <Link href={href} asChild>
-      <TouchableOpacity style={styles.settingItem} activeOpacity={0.7}>
-        <View style={styles.settingItemContent}>
-          <Ionicons
-            name={icon}
-            size={24}
-            color={type === 'destructive' ? '#FF3B30' : '#007AFF'}
-            style={styles.icon}
-          />
-          <Text
-            style={[
-              styles.settingText,
-              type === 'destructive' && styles.destructiveText,
-            ]}
-          >
-            {title}
-          </Text>
-        </View>
-        <Ionicons name='chevron-forward' size={20} color='#C7C7CC' />
-      </TouchableOpacity>
-    </Link>
-  );
-
   const SectionHeader = ({ title }: { title: string }) => (
     <Text style={styles.sectionHeader}>{title}</Text>
   );
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{text.title}</Text>
-      </View>
-
       {auth ? (
         <>
           <SectionHeader title={text.account} />
@@ -285,22 +206,12 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000',
+    backgroundColor: Colors.light.subBackground,
   },
   sectionHeader: {
     fontSize: 13,
     fontWeight: '400',
-    color: '#6D6D72',
+    color: Colors.light.subText,
     textTransform: 'uppercase',
     marginTop: 30,
     marginBottom: 8,
@@ -308,10 +219,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   section: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.light.background,
     marginHorizontal: 20,
     borderRadius: 10,
-    shadowColor: '#000',
+    shadowColor: Colors.light.shadow,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -320,35 +231,9 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 1,
   },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    minHeight: 50,
-  },
-  settingItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  icon: {
-    marginRight: 12,
-    width: 24,
-  },
-  settingText: {
-    fontSize: 17,
-    fontWeight: '400',
-    color: '#000',
-    flex: 1,
-  },
-  destructiveText: {
-    color: '#FF3B30',
-  },
   separator: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#C6C6C8',
+    backgroundColor: Colors.light.border,
     marginLeft: 52,
   },
 });
