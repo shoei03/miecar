@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { Colors } from '@/constants/Colors';
+import { purposeOptions } from '@/constants/Options';
 import { useValidation } from '@/hooks/use-validation';
 import type { formDataType } from '@/types/form';
 
@@ -61,21 +63,68 @@ export default function DateTimePicker({
 
   const { errors, validate } = useValidation();
 
+  const [isFocus, setIsFocus] = useState(false);
+  const familyMembers = [
+    { label: 'User 1', value: '1' },
+    { label: 'User 2', value: '2' },
+    { label: 'User 3', value: '3' },
+  ];
+
   return (
     <>
+      {/* 使用者名 */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>
+          使用者 <Text style={styles.required}>*</Text>
+        </Text>
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={familyMembers}
+          search
+          maxHeight={300}
+          labelField='label'
+          valueField='value'
+          placeholder={!isFocus ? 'Select item' : '...'}
+          searchPlaceholder='Search...'
+          value={formData.userName}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            handleInputChange('userName', item.value);
+            setIsFocus(false);
+          }}
+        />
+      </View>
+
       {/* 使用目的 */}
-      {/* TODO: 選択形式にする */}
       <View style={styles.formGroup}>
         <Text style={styles.label}>
           使用目的 <Text style={styles.required}>*</Text>
         </Text>
-        <TextInput
-          style={[styles.textInput, styles.multilineInput]}
-          placeholder='例: 買い物、通勤、送迎など'
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={purposeOptions}
+          search
+          maxHeight={300}
+          labelField='label'
+          valueField='value'
+          placeholder={!isFocus ? 'Select item' : '...'}
+          searchPlaceholder='Search...'
           value={formData.purpose}
-          onChangeText={value => handleInputChange('purpose', value)}
-          multiline
-          numberOfLines={3}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            handleInputChange('purpose', item.value);
+            setIsFocus(false);
+          }}
         />
       </View>
 
@@ -188,20 +237,6 @@ export default function DateTimePicker({
         </View>
         <Text style={styles.errorText}>{errors.date}</Text>
       </View>
-
-      {/* 使用者名 */}
-      {/* TODO: 選択形式にする */}
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>
-          使用者 <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder='使用者名を入力'
-          value={formData.userName}
-          onChangeText={value => handleInputChange('userName', value)}
-        />
-      </View>
     </>
   );
 }
@@ -269,5 +304,34 @@ const styles = StyleSheet.create({
     color: Colors.light.error,
     fontSize: 12,
     marginTop: 4,
+  },
+  container: {
+    backgroundColor: Colors.light.background,
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: Colors.light.border,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    backgroundColor: Colors.light.background,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });
