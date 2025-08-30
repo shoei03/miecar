@@ -27,6 +27,7 @@ export default function RootLayout() {
         <Stack.Screen
           name='(tabs)'
           options={{
+            title: 'ホーム',
             headerShown: false,
           }}
         />
@@ -38,6 +39,14 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+        <Stack.Screen
+          name='(settings)'
+          options={{
+            title: '設定',
+            headerShown: false,
+            presentation: 'modal',
+          }}
+        />
         <Stack.Screen name='+not-found' />
       </Stack>
       <StatusBar style='auto' />
