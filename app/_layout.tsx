@@ -34,8 +34,9 @@ export default function RootLayout() {
         <Stack.Screen
           name='(schedule)/[schedule]'
           options={{
-            presentation: 'modal',
+            title: 'スケジュール詳細',
             headerShown: false,
+            presentation: 'modal',
           }}
         />
         <Stack.Screen
