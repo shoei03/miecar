@@ -17,7 +17,7 @@ import { useUserStore } from '@/hooks/use-store';
 
 export default function ChangeEmailScreen() {
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [formData, setFormData] = useState({
     currentEmail: user?.email || '',
     newEmail: '',
@@ -29,6 +29,12 @@ export default function ChangeEmailScreen() {
     try {
       // TODO: 新しいメールアドレスに確認メールを送信
       // TODO: メールアドレスが変更されたことを確認する処理を実装
+      setUser({
+        uid: user?.uid ?? '',
+        email: formData.newEmail,
+        displayName: user?.displayName ?? '',
+        createdAt: user?.createdAt ?? new Date(),
+      });
       router.back();
       Toast.show({
         type: 'success',
