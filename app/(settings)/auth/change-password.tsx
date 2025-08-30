@@ -29,8 +29,9 @@ export default function ChangePasswordScreen() {
 
   const handleChangePassword = () => {
     try {
-      // TODO: パスワード変更処理をここに実装
-      // 成功時の処理
+      // TODO: 古いパスワードと新しいパスワードが異なることを確認
+      // TODO: 新しいパスワードが確認用パスワードと一致することを確認
+      // TODO: 古いパスワードと新しいパスワードをDBに送信して更新処理を実装
       router.back();
       Toast.show({
         type: 'success',

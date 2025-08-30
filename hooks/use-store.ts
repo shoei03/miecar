@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import type { ScheduleType } from '@/mock/schedule';
+import type { UserProfile } from '@/types/user';
 
 interface DayStoreState {
   today: Date;
@@ -49,4 +50,19 @@ export const useDayStore = create<DayStoreState>(set => ({
   setMockSchedules: (schedules: ScheduleType[]) =>
     set({ mockSchedules: schedules }),
   setModalVisible: (visible: boolean) => set({ isModalVisible: visible }),
+}));
+
+interface UserStoreState {
+  user: UserProfile | null;
+  setUser: (user: UserProfile | null) => void;
+}
+
+export const useUserStore = create<UserStoreState>(set => ({
+  user: {
+    uid: '',
+    email: '',
+    displayName: '',
+    createdAt: new Date(),
+  },
+  setUser: (user: UserProfile | null) => set({ user }),
 }));

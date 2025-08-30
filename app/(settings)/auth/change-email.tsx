@@ -13,11 +13,13 @@ import {
 import Toast from 'react-native-toast-message';
 
 import { Colors } from '@/constants/Colors';
+import { useUserStore } from '@/hooks/use-store';
 
 export default function ChangeEmailScreen() {
   const router = useRouter();
+  const { user } = useUserStore();
   const [formData, setFormData] = useState({
-    currentEmail: 'user@example.com', // 現在のメールアドレスを初期表示
+    currentEmail: user?.email || '',
     newEmail: '',
     password: '',
   });
@@ -25,8 +27,8 @@ export default function ChangeEmailScreen() {
 
   const handleChangeEmail = () => {
     try {
-      // TODO: メールアドレス変更処理をここに実装
-      // 確認メール送信処理
+      // TODO: 新しいメールアドレスに確認メールを送信
+      // TODO: メールアドレスが変更されたことを確認する処理を実装
       router.back();
       Toast.show({
         type: 'success',
